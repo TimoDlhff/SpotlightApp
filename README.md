@@ -1,63 +1,94 @@
-# VocalWave
+# VocalWave 🎤
 
-VocalWave ist eine innovative Android-App, die Ihnen hilft, Ihre Präsentationsfähigkeiten zu verbessern. Durch Echtzeit-Spracherkennung und subtiles haptisches Feedback unterstützt Sie die App dabei, professioneller und überzeugender zu präsentieren.
+VocalWave ist eine coole Android-App für bessere Präsentationen. Mit Echtzeit-Spracherkennung und dezenten Vibrationen hilft die App dabei, professioneller und überzeugender zu präsentieren.
 
-## Hauptfunktionen
+## Features ✨
 
-### 1. Intelligente Füllwort-Erkennung
-- Erkennt typische Füllwörter in Echtzeit (z.B. "ähm", "halt", "sozusagen")
-- Benachrichtigt Sie diskret durch Vibration, wenn Füllwörter verwendet werden
-- Hilft Ihnen, sich dieser Gewohnheit bewusst zu werden und sie zu reduzieren
+### 1. Smarte Füllwort-Erkennung
+- Erkennt Füllwörter wie "ähm", "halt" oder "sozusagen" in Echtzeit
+- Gibt dezentes Vibrations-Feedback
+- Macht unbewusste Sprechgewohnheiten bewusst
+- Eigene Füllwörter können einfach hinzugefügt werden
 
-### 2. Sprechgeschwindigkeits-Monitoring
-- Überwacht Ihre Sprechgeschwindigkeit während der Präsentation
-- Warnt Sie subtil, wenn Sie zu schnell oder zu langsam sprechen
-- Hilft Ihnen, ein optimales Sprechtempo zu halten
+### 2. Sprechgeschwindigkeits-Check
+- Behält das Sprechtempo im Auge
+- Warnt dezent bei zu schnellem oder zu langsamem Sprechen
+- Hilft dabei, das perfekte Tempo zu finden
 
-### 3. Flexibles Feedback-System
-- Wählen Sie zwischen Smartphone- oder Smartwatch-Vibration
-- Diskrete Benachrichtigungen stören nicht den Präsentationsfluss
-- Individuell anpassbare Einstellungen
+### 3. Flexibles Feedback
+- Frei wählbar: Smartphone oder Smartwatch für Vibrationen
+- Dezente Benachrichtigungen, die nicht aus dem Flow bringen
+- Komplett anpassbar an persönliche Vorlieben
 
-### 4. Detaillierte Statistiken
-- Analysiert Ihre Präsentationsgewohnheiten
-- Zeigt Häufigkeit von Füllwörtern
-- Visualisiert Sprechgeschwindigkeits-Muster
-- Ermöglicht langfristige Fortschrittsverfolgung
+### 4. Detaillierte Stats
+- Analysiert die Präsentation
+- Zeigt an, welche Füllwörter wie oft vorkommen
+- Visualisiert das Sprechtempo
+- Macht Fortschritte über Zeit sichtbar
 
-## Installation
+### 5. Zwei Modi
+- Präsentationsmodus: Dezentes Feedback für den Ernstfall
+- Trainingsmodus: Intensives Feedback zum Üben
 
-### 1. Projekt klonen
+## Installation 🚀
+
+### 1. Code holen
 ```bash
 git clone https://github.com/TimoDlhff/VocalWaveApp.git
 ```
 
-### 2. Projekt in Android Studio öffnen
-1. Starten Sie Android Studio
-2. Wählen Sie "Open an existing Android Studio project"
-3. Navigieren Sie zum geklonten VocalWaveApp-Verzeichnis und öffnen Sie es
+### 2. In Android Studio öffnen
+1. Android Studio starten
+2. "Open an existing Android Studio project" wählen
+3. Zum VocalWaveApp-Ordner navigieren und öffnen
 
 ### 3. Projekt einrichten
-1. Warten Sie, bis Android Studio das Projekt vollständig geladen hat
-2. Klicken Sie auf "Sync Project with Gradle Files" (das Elephant-Symbol in der Toolbar)
-3. Warten Sie, bis die Synchronisierung abgeschlossen ist
+1. Kurz warten bis Android Studio alles geladen hat
+2. Auf das Elefanten-Symbol klicken ("Sync Project with Gradle Files")
+3. Synchronisierung abwarten
 
-### 4. App auf Ihrem Gerät installieren
-1. Verbinden Sie Ihr Android-Gerät via USB mit dem Computer
-2. Aktivieren Sie auf Ihrem Gerät den "Entwicklermodus" und "USB-Debugging"
-3. Wählen Sie in Android Studio Ihr Gerät aus der Geräteliste
-4. Klicken Sie auf den "Run"-Button (grüner Play-Button)
+### 4. App installieren
+1. Android-Gerät per USB anschließen
+2. Entwicklermodus und USB-Debugging auf dem Gerät aktivieren
+3. Gerät in Android Studio auswählen
+4. Auf den grünen Play-Button klicken
 
-## Technische Details
+## Technik-Details 🔧
 
-Die App verwendet das VOSK-Spracherkennungsmodell für die deutsche Sprache. Das Modell ist bereits im Repository enthalten und wird automatisch mit dem Projekt heruntergeladen (ca. 88 MB).
+Die App nutzt VOSK für die Spracherkennung. Das deutsche Sprachmodell (ca. 88 MB) ist direkt dabei und wird automatisch mit installiert.
 
-## Systemanforderungen
+### Andere Sprachen nutzen
 
-- Android 6.0 oder höher
-- Optional: Wear OS Smartwatch für erweitertes Feedback
-- Mindestens 500MB freier Speicherplatz für Sprachmodelle
+Die App kann auch andere Sprachen lernen! So geht's:
 
-## Dokumentation
+1. VOSK-Modell besorgen:
+   - Ab zur [VOSK-Modelle-Seite](https://alphacephei.com/vosk/models)
+   - Passendes Modell aussuchen (z.B. `vosk-model-small-en-us-0.15` für Englisch)
+   - ZIP-Datei runterladen
 
-Für weitere technische Dokumentation und Anweisungen zur Vosk-Integration besuchen Sie die [Vosk Website](https://alphacephei.com/vosk/android).
+2. Modell einbauen:
+   - ZIP entpacken
+   - Ordner nach `models/src/main/assets/` kopieren
+   - Ordner sollte so heißen: `vosk-model-small-XX-YY-0.15`
+     - XX = Sprache (z.B. 'en' für Englisch)
+     - YY = Region (z.B. 'us' für USA)
+
+3. Code anpassen:
+   - `app/src/main/java/org/vosk/demo/VoskActivity.java` öffnen
+   - Nach `model-de-DE` suchen
+   - Neue Sprache hinzufügen oder die alte ersetzen
+
+Beispiel für Englisch:
+```java
+String modelPath = new File(assetDir, "vosk-model-small-en-us-0.15").getAbsolutePath();
+```
+
+## System-Voraussetzungen 📱
+
+- Android 6.0 oder neuer
+- Optional: Wear OS Smartwatch für noch besseres Feedback
+- Mind. 500MB freier Speicher für die Sprachmodelle
+
+## Mehr Infos 📚
+
+Mehr technische Details und Docs zur Vosk-Integration gibt's auf der [Vosk Website](https://alphacephei.com/vosk/android).

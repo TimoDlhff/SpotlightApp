@@ -39,7 +39,6 @@ public class StatisticsActivityPresentation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Kannst das gleiche Layout wie beim Training verwenden
         setContentView(R.layout.activity_statistics_training);
 
         barChart = findViewById(R.id.barChart);
@@ -61,7 +60,6 @@ public class StatisticsActivityPresentation extends AppCompatActivity {
 
         homeButton.setOnClickListener(v -> {
             Intent homeIntent = new Intent(
-                    
                     StatisticsActivityPresentation.this,
                     MainActivity.class
             );
@@ -219,6 +217,4 @@ public class StatisticsActivityPresentation extends AppCompatActivity {
         }
         pieChartDescription.setText(spannableString);
     }
-
-
 }

@@ -75,7 +75,7 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
 
     // Neuer Zähler für Füllwort-Erkennungen
     private int fillerWordDetectedCount = 0;
-
+    private HashMap<String, String> variantToBaseWord = new HashMap<>();
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -96,10 +96,7 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
         ArrayList<String> baseWords = getIntent().getStringArrayListExtra("SELECTED_WORDS");
         if (baseWords != null) {
             expandSelectedWords(baseWords);
-            // Initialisiere die HashMap
-            for (String word : selectedWords) {
-                fillerWordCounts.put(word.toLowerCase(), 0);
-            }
+            Log.d("FillerWordActivityPresentation", "Empfangene Wörter: " + selectedWords);
         }
 
         Log.d("FillerWordActivityPresentation", "Empfangene Wörter: " + selectedWords);
@@ -158,6 +155,8 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
             finish();
         });
         sendStartTimerMessage();
+
+
     }
 
     /**
@@ -205,9 +204,16 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
     private void expandSelectedWords(List<String> baseWords) {
         for (String word : baseWords) {
             if (word.equalsIgnoreCase("ähm")) {
-                selectedWords.addAll(Arrays.asList("ähm", "äh", "hm", "emm", "am", "m", "öhm", "uhm", "ähh", "hmm", "und am", "und im"));
+                List<String> variants = Arrays.asList("ähm", "äh", "hm", "emm", "am", "m", "öhm", "uhm", "ähh", "hmm", "und am", "und im");
+                selectedWords.addAll(variants);
+                for (String variant : variants) {
+                    variantToBaseWord.put(variant.toLowerCase(), "ähm");
+                }
+                fillerWordCounts.put("ähm", 0); // Initialisiere Zählung für das Basiswort
             } else {
                 selectedWords.add(word);
+                variantToBaseWord.put(word.toLowerCase(), word);
+                fillerWordCounts.put(word, 0); // Initialisiere Zählung für andere Basiswörter
             }
         }
     }
@@ -280,9 +286,13 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
             }
 
             if (detectedWord != null) {
-                // Inkrementiere die Zählung des erkannten Füllworts
-                fillerWordCounts.put(detectedWord, fillerWordCounts.getOrDefault(detectedWord, 0) + 1);
-                fillerWordDetectedCount++; // Gesamtzahl der erkannten Füllwörter erhöhen
+                // Finde das Basiswort für die erkannte Variante
+                String baseWord = variantToBaseWord.get(detectedWord);
+                if (baseWord != null) {
+                    // Inkrementiere die Zählung des Basisworts
+                    fillerWordCounts.put(baseWord, fillerWordCounts.getOrDefault(baseWord, 0) + 1);
+                    fillerWordDetectedCount++; // Gesamtzahl der erkannten Füllwörter erhöhen
+                }
             }
 
             // Zähle die Gesamtwörter

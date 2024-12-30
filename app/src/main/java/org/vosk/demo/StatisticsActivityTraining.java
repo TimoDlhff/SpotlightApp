@@ -23,7 +23,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,8 +53,8 @@ public class StatisticsActivityTraining extends AppCompatActivity {
         fillerWordCounts = (HashMap<String, Integer>) intent.getSerializableExtra("fillerWordCounts");
         totalWordCount = intent.getIntExtra("totalWordCount", 0);
 
-        android.util.Log.d("StatisticsActivity", "FillerWordCounts: " + fillerWordCounts);
-        android.util.Log.d("StatisticsActivity", "TotalWordCount: " + totalWordCount);
+        android.util.Log.d("StatisticsActivityTraining", "FillerWordCounts: " + fillerWordCounts);
+        android.util.Log.d("StatisticsActivityTraining", "TotalWordCount: " + totalWordCount);
 
         if (fillerWordCounts == null || fillerWordCounts.isEmpty()) {
             Toast.makeText(this, "Keine Füllwörter erkannt", Toast.LENGTH_SHORT).show();
@@ -74,7 +73,7 @@ public class StatisticsActivityTraining extends AppCompatActivity {
     }
 
     private void setupBarChart() {
-        android.util.Log.d("StatisticsActivity", "Setting up BarChart");
+        android.util.Log.d("StatisticsActivityTraining", "Setting up BarChart");
         // 1) Daten aufbereiten
         List<BarEntry> entries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
@@ -85,7 +84,7 @@ public class StatisticsActivityTraining extends AppCompatActivity {
             float count = fillerWordCounts.get(word);
             entries.add(new BarEntry(index, count));
             labels.add(word);
-            android.util.Log.d("StatisticsActivity", "Adding entry: word=" + word + ", count=" + count + ", index=" + index);
+            android.util.Log.d("StatisticsActivityTraining", "Adding entry: word=" + word + ", count=" + count + ", index=" + index);
 
             if (count > maxCount) {
                 maxCount = count;
@@ -97,12 +96,17 @@ public class StatisticsActivityTraining extends AppCompatActivity {
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "");
-        // Wir ignorieren an dieser Stelle die Farben,
-        // da unser Custom-Renderer eh mit festen Farben arbeitet.
-        // (Wenn du doch abwechseln willst, kannst du das hier tun,
-        //  aber in MyRoundedBarChartRenderer wird's überschrieben.)
-
-        // Wichtig: KEINE Standard-Values
+        // Abwechselnd Cyan/Weiß
+        List<Integer> colors = new ArrayList<>();
+        for (int i = 0; i < entries.size(); i++) {
+            if (i % 2 == 0) {
+                colors.add(Color.parseColor("#949FFF"));
+            } else {
+                colors.add(Color.WHITE);
+            }
+        }
+        dataSet.setColors(colors);
+        // Keine Standard-Werteanzeige
         dataSet.setDrawValues(false);
 
         BarData barData = new BarData(dataSet);
@@ -122,7 +126,7 @@ public class StatisticsActivityTraining extends AppCompatActivity {
         xAxis.setTextColor(Color.WHITE);
         xAxis.setTextSize(16f);
         xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new com.github.mikephil.charting.formatter.IndexAxisValueFormatter(labels));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
 
         // Nur 1 Balken => -0.5 bis +0.5, mehrere => -0.5 bis (size - 0.5)
         if (entries.size() == 1) {
@@ -153,7 +157,6 @@ public class StatisticsActivityTraining extends AppCompatActivity {
                 )
         );
 
-
         // 4) Animation & Interaktionsverbot
         barChart.animateY(1000);
         barChart.setTouchEnabled(false);
@@ -169,7 +172,6 @@ public class StatisticsActivityTraining extends AppCompatActivity {
     }
 
     private void setupPieChart() {
-        // Uralter Code wie gehabt ...
         List<PieEntry> entries = new ArrayList<>();
         int fillerWords = 0;
         for (int count : fillerWordCounts.values()) {
@@ -182,7 +184,6 @@ public class StatisticsActivityTraining extends AppCompatActivity {
         entries.add(new PieEntry(otherWords, "Andere Wörter"));
 
         PieDataSet dataSet = new PieDataSet(entries, "");
-        // Farben: ...
         List<Integer> colors = new ArrayList<>();
         colors.add(Color.parseColor("#00CADD"));
         colors.add(Color.WHITE);

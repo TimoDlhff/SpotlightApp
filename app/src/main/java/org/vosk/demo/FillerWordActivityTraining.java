@@ -75,6 +75,9 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
     // Neuer Zähler für Füllwort-Erkennungen
     private int fillerWordDetectedCount = 0;
 
+    // Einführung der Zuordnung von Varianten zu Basiswörtern
+    private HashMap<String, String> variantToBaseWord = new HashMap<>();
+
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -95,13 +98,8 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
         ArrayList<String> baseWords = getIntent().getStringArrayListExtra("SELECTED_WORDS");
         if (baseWords != null) {
             expandSelectedWords(baseWords);
-            // Initialisiere die HashMap
-            for (String word : selectedWords) {
-                fillerWordCounts.put(word.toLowerCase(), 0);
-            }
+            Log.d("FillerWordActivityTraining", "Empfangene Wörter: " + selectedWords);
         }
-
-        Log.d("FillerWordActivityTraining", "Empfangene Wörter: " + selectedWords);
 
         // Mikrofonberechtigungen prüfen
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -114,8 +112,6 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
             Log.e("FillerWordActivityTraining", "timerTextView ist null! Überprüfe die XML-ID.");
             return;
         }
-
-
 
         // Buttons initialisieren
         ImageView backButton = findViewById(R.id.backButton);
@@ -156,6 +152,7 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
         if (useWatchAudio) {
             Wearable.getMessageClient(this).addListener(messageListener);
         }
+
         sendStartTimerMessage();
     }
 
@@ -201,12 +198,22 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
         }
     }
 
+    /**
+     * Erweiterte Methode, um Varianten zu Basiswörtern zuzuordnen.
+     */
     private void expandSelectedWords(List<String> baseWords) {
         for (String word : baseWords) {
             if (word.equalsIgnoreCase("ähm")) {
-                selectedWords.addAll(Arrays.asList("ähm", "äh", "hm", "emm", "am", "m", "öhm", "uhm", "ähh", "hmm", "und am", "und im"));
+                List<String> variants = Arrays.asList("ähm", "äh", "hm", "emm", "am", "m", "öhm", "uhm", "ähh", "hmm", "und am", "und im");
+                selectedWords.addAll(variants);
+                for (String variant : variants) {
+                    variantToBaseWord.put(variant.toLowerCase(), "ähm");
+                }
+                fillerWordCounts.put("ähm", 0); // Initialisiere Zählung für das Basiswort
             } else {
                 selectedWords.add(word);
+                variantToBaseWord.put(word.toLowerCase(), word);
+                fillerWordCounts.put(word, 0); // Initialisiere Zählung für andere Basiswörter
             }
         }
     }
@@ -279,9 +286,13 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
             }
 
             if (detectedWord != null) {
-                // Inkrementiere die Zählung des erkannten Füllworts
-                fillerWordCounts.put(detectedWord, fillerWordCounts.getOrDefault(detectedWord, 0) + 1);
-                fillerWordDetectedCount++; // Gesamtzahl der erkannten Füllwörter erhöhen
+                // Finde das Basiswort für die erkannte Variante
+                String baseWord = variantToBaseWord.get(detectedWord);
+                if (baseWord != null) {
+                    // Inkrementiere die Zählung des Basisworts
+                    fillerWordCounts.put(baseWord, fillerWordCounts.getOrDefault(baseWord, 0) + 1);
+                    fillerWordDetectedCount++; // Gesamtzahl der erkannten Füllwörter erhöhen
+                }
             }
 
             // Zähle die Gesamtwörter
@@ -316,8 +327,6 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
             restartListening();
         }
     }
-
-
 
     private void sendVibrationCommandToWatch(String detectedWord) {
         // 1. NodeId herausfinden
@@ -396,8 +405,6 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
         }
     }
 
-
-
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
@@ -434,6 +441,7 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
         String[] words = text.trim().split("\\s+");
         return words.length;
     }
+
     private void sendStartTimerMessage() {
         String message = "start_timer"; // Optional: Fügen Sie zusätzliche Informationen hinzu
         new Thread(() -> {
@@ -451,10 +459,7 @@ public class FillerWordActivityTraining extends Activity implements RecognitionL
             }
         }).start();
     }
-
 }
-
-
 
 
 

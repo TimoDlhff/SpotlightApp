@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class StatisticsActivityPresentation extends AppCompatActivity {
+public class StatisticsActivityPresentation extends BaseActivity {
 
     private BarChart barChart;
     private PieChart pieChart;
@@ -40,7 +40,7 @@ public class StatisticsActivityPresentation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics_training);
-
+        setupToolbar();
         barChart = findViewById(R.id.barChart);
         pieChart = findViewById(R.id.pieChart);
         homeButton = findViewById(R.id.homeButton);
@@ -58,18 +58,7 @@ public class StatisticsActivityPresentation extends AppCompatActivity {
         setupBarChart();
         setupPieChart();
 
-        homeButton.setOnClickListener(v -> {
-            Intent homeIntent = new Intent(
-                    StatisticsActivityPresentation.this,
-                    MainActivity.class
-            );
-            homeIntent.setFlags(
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            | Intent.FLAG_ACTIVITY_SINGLE_TOP
-            );
-            startActivity(homeIntent);
-            finish();
-        });
+
     }
 
     private void setupBarChart() {

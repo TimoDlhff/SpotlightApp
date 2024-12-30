@@ -23,7 +23,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatisticsActivitySpeechSpeedPresentation extends AppCompatActivity {
+public class StatisticsActivitySpeechSpeedPresentation extends BaseActivity {
 
     private PieChart pieChart;
     private TextView pieChartDescription;
@@ -34,7 +34,7 @@ public class StatisticsActivitySpeechSpeedPresentation extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics_speechespeed);
-
+        setupToolbar();
         // UI-Elemente initialisieren
         pieChart = findViewById(R.id.pieChart);
         pieChartDescription = findViewById(R.id.pieChartDescription);
@@ -57,13 +57,7 @@ public class StatisticsActivitySpeechSpeedPresentation extends AppCompatActivity
         // Beschreibungstext aktualisieren
         updateDescription();
 
-        // Home-Button Listener
-        homeButton.setOnClickListener(v -> {
-            Intent homeIntent = new Intent(StatisticsActivitySpeechSpeedPresentation.this, MainActivity.class);
-            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(homeIntent);
-            finish();
-        });
+
     }
 
     private void setupPieChart() {

@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class FillerWordAdjustmentPresentation extends AppCompatActivity {
+public class FillerWordAdjustmentPresentation extends BaseActivity {
     private LinearLayout fillerWordsContainer;
     private Button word1Button, word2Button, word3Button, addWordButton;
     private LinearLayout currentRow;
@@ -27,28 +27,11 @@ public class FillerWordAdjustmentPresentation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filler_words_adjustment_presentation); // Korrektes Layout!
-
+        setupToolbar();
         // Vorherige Auswahl aus Intent laden
         String mode = getIntent().getStringExtra("mode");
         useWatchVibration = getIntent().getBooleanExtra("useWatchVibration", false);
 
-        // Toolbar Navigation
-        ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(FillerWordAdjustmentPresentation.this, DeviceSelectionPresentationActivity.class);
-            intent.putExtra("mode", mode); // Auswahl zurück übergeben
-            startActivity(intent);
-
-            finish();
-        });
-
-        ImageView homeButton = findViewById(R.id.homeButton);
-        homeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(FillerWordAdjustmentPresentation.this, MainActivity.class);
-            startActivity(intent);
-
-            finish();
-        });
 
         // UI-Elemente initialisieren
         fillerWordsContainer = findViewById(R.id.fillerWordsContainer);

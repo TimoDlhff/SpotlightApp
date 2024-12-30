@@ -1,17 +1,14 @@
 package org.vosk.demo;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.content.Context;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,7 +43,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
-public class FillerWordActivityPresentation extends Activity implements RecognitionListener {
+public class FillerWordActivityPresentation extends BaseActivity implements RecognitionListener {
 
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
     private static final String AUDIO_PATH = "/audio_path";
@@ -58,33 +55,44 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
     private LinearLayout mainLayout;
     private List<String> selectedWords = new ArrayList<>();
     private HashMap<String, Integer> fillerWordCounts = new HashMap<>();
-    private int totalWordCount = 0; // Gesamtanzahl der gesprochenen Wörter
+    private int totalWordCount = 0;
     private boolean isListening = false;
     private AudioVisualizerViewPresentation visualizerView;
-    private TextView timerTextView; // Timer TextView
+    private TextView timerTextView;
     private Handler timerHandler = new Handler();
-    private int timerSeconds = 0; // Timer Startzeit in Sekunden
+    private int timerSeconds = 0;
     private final Handler handler = new Handler();
-    private boolean useWatchVibration = false; // Standard
+    private boolean useWatchVibration = false;
     private boolean useWatchAudio = false;
     private String remoteNodeId;
     private static final String START_TIMER_PATH = "/start_timer";
-
-    private final Handler cooldownHandler = new Handler(); // Handler für Verzögerung
-    private boolean canVibrate = true; // Cooldown für die Vibration
-
-    // Neuer Zähler für Füllwort-Erkennungen
-    private int fillerWordDetectedCount = 0;
     private HashMap<String, String> variantToBaseWord = new HashMap<>();
+
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        setContentView(R.layout.filler_words_presentation); // Stelle sicher, dass das Layout korrekt ist
+        setContentView(R.layout.filler_words_presentation);
 
         // UI-Elemente initialisieren
         resultView = findViewById(R.id.result_text);
         visualizerView = findViewById(R.id.audioVisualizer);
         timerTextView = findViewById(R.id.timerText);
+
+        // Toolbar Setup
+        setupToolbar();
+
+        // Finish-Button Setup
+        ImageView finishButton = findViewById(R.id.finishButton);
+        if (finishButton != null) {
+            finishButton.setOnClickListener(v -> {
+                stopBackgroundProcesses();
+                Intent intent = new Intent(this, StatisticsActivityPresentation.class);
+                intent.putExtra("fillerWordCounts", fillerWordCounts);
+                intent.putExtra("totalWordCount", totalWordCount);
+                startActivity(intent);
+                finish();
+            });
+        }
 
         // Extras aus dem Intent übernehmen
         useWatchVibration = getIntent().getBooleanExtra("useWatchVibration", false);
@@ -99,8 +107,6 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
             Log.d("FillerWordActivityPresentation", "Empfangene Wörter: " + selectedWords);
         }
 
-        Log.d("FillerWordActivityPresentation", "Empfangene Wörter: " + selectedWords);
-
         // Mikrofonberechtigungen prüfen
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
@@ -113,72 +119,12 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
             return;
         }
 
-
-
-        // Buttons initialisieren
-        ImageView backButton = findViewById(R.id.backButton);
-        ImageView homeButton = findViewById(R.id.homeButton);
-        ImageView closeButton = findViewById(R.id.finishButton);
-
-        // Zurück-Button: Zur vorherigen Aktivität (AdjustmentsActivity)
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(FillerWordActivityPresentation.this, FillerWordAdjustmentPresentation.class);
-            startActivity(intent);
-            finish(); // Optional: Schließe die aktuelle Aktivität
-        });
-
-        // Home-Button: Zur Hauptaktivität (MainActivity)
-        homeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(FillerWordActivityPresentation.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish(); // Beendet die aktuelle Aktivität
-        });
-
         // Watch Message Listener aktivieren, falls erforderlich
         if (useWatchAudio) {
             Wearable.getMessageClient(this).addListener(messageListener);
         }
 
-        // Close-Button: Zur Statistik-Activity
-        closeButton.setOnClickListener(v -> {
-            // Stoppe alle Hintergrundprozesse
-            stopBackgroundProcesses();
-
-            // Navigiere zur StatisticsActivityPresentation
-            Intent intent = new Intent(FillerWordActivityPresentation.this, StatisticsActivityPresentation.class);
-            intent.putExtra("fillerWordCounts", fillerWordCounts);
-            intent.putExtra("totalWordCount", totalWordCount);
-            startActivity(intent);
-
-            // Beende die aktuelle Aktivität
-            finish();
-        });
         sendStartTimerMessage();
-
-
-    }
-
-    /**
-     * Beendet alle Hintergrundprozesse wie SpeechService und entfernt Listener.
-     */
-    private void stopBackgroundProcesses() {
-        // Stoppe den SpeechService
-        if (speechService != null) {
-            speechService.stop();
-            speechService.shutdown();
-            speechService = null;
-            isListening = false;
-            Log.d("FillerWordActivityPresentation", "SpeechService gestoppt.");
-        }
-
-        // Entferne den Wearable Message Listener, falls aktiv
-        if (useWatchAudio) {
-            Wearable.getMessageClient(this).removeListener(messageListener);
-            Log.d("FillerWordActivityPresentation", "Wearable Message Listener entfernt.");
-        }
-
-        // Weitere Hintergrundprozesse können hier gestoppt werden
     }
 
     private final MessageClient.OnMessageReceivedListener messageListener = new MessageClient.OnMessageReceivedListener() {
@@ -271,63 +217,51 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
     }
 
     private void handleVibration(String spokenText) {
-        if (canVibrate && containsSelectedWord(spokenText)) {
-            Log.d("FillerWordActivityPresentation", "Füllwort erkannt: " + spokenText);
+        if (!isListening || !containsSelectedWord(spokenText)) return;
 
-            // Visualizer für Rot-Highlight triggern
-            visualizerView.triggerRedHighlight();
+        Log.d("FillerWordActivityPresentation", "Füllwort erkannt: " + spokenText);
 
-            String detectedWord = null;
-            for (String word : selectedWords) {
-                if (Pattern.compile("\\b" + Pattern.quote(word) + "\\b", Pattern.CASE_INSENSITIVE).matcher(spokenText).find()) {
-                    detectedWord = word.toLowerCase();
-                    break;
-                }
+        // Visualizer für Rot-Highlight triggern
+        runOnUiThread(() -> {
+            if (visualizerView != null) {
+                visualizerView.triggerRedHighlight();
             }
+        });
 
-            if (detectedWord != null) {
-                // Finde das Basiswort für die erkannte Variante
-                String baseWord = variantToBaseWord.get(detectedWord);
-                if (baseWord != null) {
-                    // Inkrementiere die Zählung des Basisworts
-                    fillerWordCounts.put(baseWord, fillerWordCounts.getOrDefault(baseWord, 0) + 1);
-                    fillerWordDetectedCount++; // Gesamtzahl der erkannten Füllwörter erhöhen
-                }
-            }
-
-            // Zähle die Gesamtwörter
-            totalWordCount += countWords(spokenText);
-
-            boolean shouldVibrate = false;
-            if (fillerWordDetectedCount == 1 || fillerWordDetectedCount % 3 == 0) {
-                shouldVibrate = true;
-            }
-
-            if (shouldVibrate && useWatchVibration && detectedWord != null) {
-                // Sende das erkannte Wort an die Watch
-                sendVibrationCommandToWatch(detectedWord);
-            } else if (shouldVibrate) {
-                // Sofort vibrieren auf dem Handy
-                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                if (vibrator != null) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                    } else {
-                        vibrator.vibrate(500); // Vibrieren für 500 ms
-                    }
-                }
-            }
-
-            // Cooldown aktivieren
-            canVibrate = false;
-            cooldownHandler.postDelayed(() -> {
-                canVibrate = true;
-                Log.d("FillerWordActivityPresentation", "Cooldown beendet. Vibration wieder erlaubt.");
-            }, 2000);
-
-            // Spracherkennung neustarten
-            restartListening();
+        String detectedWord = findMatchingWord(spokenText);
+        if (detectedWord != null) {
+            fillerWordCounts.put(detectedWord, fillerWordCounts.getOrDefault(detectedWord, 0) + 1);
         }
+
+        // Zähle die Gesamtwörter
+        totalWordCount += countWords(spokenText);
+
+        // Sende Vibration an die Watch oder das Handy
+        if (useWatchVibration) {
+            // Nur Watch-Vibration
+            try {
+                sendVibrationCommandToWatch(detectedWord != null ? detectedWord : "unknown");
+            } catch (Exception e) {
+                Log.e("FillerWordActivityPresentation", "Fehler beim Senden der Vibration an die Watch", e);
+            }
+        } else {
+            // Nur Handy-Vibration
+            if (vibrator != null) {
+                vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+            }
+        }
+
+        // Spracherkennung neustarten
+        restartListening();
+    }
+
+    private String findMatchingWord(String spokenText) {
+        for (String word : selectedWords) {
+            if (Pattern.compile("\\b" + Pattern.quote(word) + "\\b", Pattern.CASE_INSENSITIVE).matcher(spokenText).find()) {
+                return word;
+            }
+        }
+        return null;
     }
 
     private void sendVibrationCommandToWatch(String detectedWord) {
@@ -400,28 +334,29 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startListeningAutomatically();
-        } else {
-            finish();
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startListeningAutomatically();
+            } else {
+                finish();
+            }
         }
     }
 
-
-
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    private void stopBackgroundProcesses() {
+        // Stoppe die Spracherkennung
+        if (speechService != null) {
+            speechService.stop();
+            speechService.shutdown();
+        }
     }
 
     @Override
-    public void finish() {
+    protected void onDestroy() {
         // Beende alle Hintergrundprozesse
         stopBackgroundProcesses();
-
-        super.finish();
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        super.onDestroy();
     }
 
     private void restartListening() {
@@ -432,7 +367,7 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
         }
 
         // Kurze Verzögerung, bevor die Erkennung neu startet
-        cooldownHandler.postDelayed(() -> {
+        handler.postDelayed(() -> {
             startListening();
             Log.d("FillerWordActivityPresentation", "Spracherkennung neu gestartet.");
         }, 500);
@@ -446,12 +381,6 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
         return words.length;
     }
 
-    @Override
-    protected void onDestroy() {
-        // Beende alle Hintergrundprozesse
-        stopBackgroundProcesses();
-        super.onDestroy();
-    }
     private void sendStartTimerMessage() {
         String message = "start_timer"; // Optional: Fügen Sie zusätzliche Informationen hinzu
         new Thread(() -> {
@@ -470,6 +399,10 @@ public class FillerWordActivityPresentation extends Activity implements Recognit
         }).start();
     }
 
+    @Override
+    protected void handleBackButton() {
+        Intent intent = new Intent(this, FillerWordAdjustmentPresentation.class);
+        startActivity(intent);
+        finish();
+    }
 }
-
-

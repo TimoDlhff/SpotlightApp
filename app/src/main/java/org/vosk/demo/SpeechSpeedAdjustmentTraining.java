@@ -19,7 +19,7 @@ import com.google.android.gms.wearable.Wearable;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class SpeechSpeedAdjustmentTraining extends AppCompatActivity {
+public class SpeechSpeedAdjustmentTraining extends BaseActivity {
     private SeekBar speedSeekBar;
     private ImageView snailIcon, rabbitIcon;
     private TextView speedLabel;
@@ -33,7 +33,7 @@ public class SpeechSpeedAdjustmentTraining extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speech_speed_adjustment_training);
-
+        setupToolbar();
         // UI-Elemente initialisieren
         speedSeekBar = findViewById(R.id.speedSeekBar);
         speedLabel = findViewById(R.id.speedLabel);
@@ -72,21 +72,7 @@ public class SpeechSpeedAdjustmentTraining extends AppCompatActivity {
         // Play-Button Listener
         playButtonContainer.setOnClickListener(v -> navigateToSpeechSpeedActivity());
 
-        // Zurück-Button in der Toolbar
-        ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SpeechSpeedAdjustmentTraining.this, DeviceSelectionTrainingActivity.class);
-            startActivity(intent);
-            finish();
-        });
 
-        // Home-Button in der Toolbar
-        ImageView homeButton = findViewById(R.id.homeButton);
-        homeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SpeechSpeedAdjustmentTraining.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
     }
 
     private void navigateToSpeechSpeedActivity() {

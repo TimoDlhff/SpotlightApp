@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class SpeechSpeedActivityTraining extends AppCompatActivity {
+public class SpeechSpeedActivityTraining extends BaseActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final String TAG = "SpeechSpeedDetector";
 
@@ -62,6 +62,8 @@ public class SpeechSpeedActivityTraining extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speech_speed_training);
+        setupToolbar();
+
         Intent intent = getIntent();
         thresholdSpeed = intent.getIntExtra("speech_speed", 120);
         // UI-Elemente
@@ -86,30 +88,6 @@ public class SpeechSpeedActivityTraining extends AppCompatActivity {
             startListening();
         }
 
-        // Zurück-Button in der Toolbar
-        ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent1 = new Intent(SpeechSpeedActivityTraining.this, SpeechSpeedAdjustmentTraining.class);
-            startActivity(intent1);
-
-            // Beende die aktuelle Aktivität
-            finish();
-        });
-
-        // Home-Button in der Toolbar
-        ImageView homeButton = findViewById(R.id.homeButton);
-        homeButton.setOnClickListener(v -> {
-            // Stoppe alle Hintergrundprozesse
-            stopBackgroundProcesses();
-
-            // Navigiere zur MainActivity und lösche den Aktivitäts-Stack
-            Intent intent2 = new Intent(SpeechSpeedActivityTraining.this, MainActivity.class);
-            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent2);
-
-            // Beende die aktuelle Aktivität
-            finish();
-        });
 
         // Finish-Button (X) Listener
         ImageView finishButton = findViewById(R.id.finishButton);

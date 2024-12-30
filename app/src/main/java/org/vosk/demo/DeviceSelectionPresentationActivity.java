@@ -2,23 +2,17 @@ package org.vosk.demo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class DeviceSelectionPresentationActivity extends AppCompatActivity {
+public class DeviceSelectionPresentationActivity extends BaseActivity {
 
     private String selectedMode; // Hier wird der Modus (speed oder filler_words) gespeichert
     private static final String MESSAGE_PATH = "/message_path";
@@ -28,24 +22,11 @@ public class DeviceSelectionPresentationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selection_device_presentation);
 
+        // Toolbar einrichten (zentrale Navbar-Logik)
+        setupToolbar();
+
         // Empfange den Modus aus der vorherigen Activity
         selectedMode = getIntent().getStringExtra("mode");
-
-        // Toolbar Navigation
-        ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            // Animation für den Klick
-            v.animate()
-                    .alpha(0.5f)
-                    .setDuration(100)
-                    .withEndAction(() -> v.animate()
-                            .alpha(1f)
-                            .setDuration(100)
-                            .start())
-                    .start();
-
-            finish(); // Optional: Schließe die aktuelle Aktivität
-        });
 
         // Phone-Auswahl
         LinearLayout phoneModeCard = findViewById(R.id.handyModeCard);
@@ -65,7 +46,7 @@ public class DeviceSelectionPresentationActivity extends AppCompatActivity {
         // Watch-Auswahl
         LinearLayout watchModeCard = findViewById(R.id.watchModeCard);
         watchModeCard.setOnClickListener(v -> {
-            // Send message about selected mode to watch
+            // Sende Nachricht über den ausgewählten Modus an die Watch
             String message = "Willkommen beim";
             if ("filler_words".equals(selectedMode)) {
                 message += "\nFillerword Modus";
@@ -97,10 +78,15 @@ public class DeviceSelectionPresentationActivity extends AppCompatActivity {
             } else {
                 return;
             }
-            intent.putExtra("useWatchVibration", true);  // Set flag for watch vibration
+            intent.putExtra("useWatchVibration", true);  // Flag für Watch-Vibration setzen
             startActivity(intent);
             finish();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed(); // Standard-Back-Verhalten (zur vorherigen Activity)
     }
 
     @Override
@@ -109,5 +95,6 @@ public class DeviceSelectionPresentationActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 }
+
 
 

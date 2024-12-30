@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SpeechSpeedAdjustmentPresentation extends AppCompatActivity {
+public class SpeechSpeedAdjustmentPresentation extends BaseActivity {
     private SeekBar speedSeekBar;
     private ImageView snailIcon, rabbitIcon;
     private TextView speedLabel;
@@ -23,7 +23,7 @@ public class SpeechSpeedAdjustmentPresentation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speech_speed_adjustment_presentation);
-
+        setupToolbar();
         // UI-Elemente initialisieren
         speedSeekBar = findViewById(R.id.speedSeekBar);
         speedLabel = findViewById(R.id.speedLabel);
@@ -63,21 +63,8 @@ public class SpeechSpeedAdjustmentPresentation extends AppCompatActivity {
         // Play-Button OnClickListener hinzufügen
         playButtonContainer.setOnClickListener(v -> navigateToSpeechSpeedActivity());
 
-        // Zurück-Button in der Toolbar
-        ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SpeechSpeedAdjustmentPresentation.this, DeviceSelectionPresentationActivity.class);
-            startActivity(intent);
-            finish();
-        });
 
-        // Home-Button in der Toolbar
-        ImageView homeButton = findViewById(R.id.homeButton);
-        homeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SpeechSpeedAdjustmentPresentation.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
+
     }
 
     private void navigateToSpeechSpeedActivity() {

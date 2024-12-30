@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class SpeechSpeedActivityPresentation extends AppCompatActivity {
+public class SpeechSpeedActivityPresentation extends BaseActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final String TAG = "SpeechSpeedDetector";
 
@@ -74,9 +74,9 @@ public class SpeechSpeedActivityPresentation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speech_speed_presentation);
-        Intent intent = getIntent();
-        thresholdSpeed = intent.getIntExtra("speech_speed", 120);
-        // UI-Elemente
+        setupToolbar();
+
+        // Initialize UI components
         outerCircle = findViewById(R.id.outerCircle);
         wpmNumber = findViewById(R.id.wpmNumber);
         wpmLabel = findViewById(R.id.wpmLabel);
@@ -84,8 +84,8 @@ public class SpeechSpeedActivityPresentation extends AppCompatActivity {
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         // Schwellenwert aus vorheriger Activity
-        thresholdSpeed = intent.getIntExtra("speech_speed", 120);
-        useWatchVibration = intent.getBooleanExtra("useWatchVibration", false);
+        thresholdSpeed = getIntent().getIntExtra("speech_speed", 120);
+        useWatchVibration = getIntent().getBooleanExtra("useWatchVibration", false);
         outerCircle.setMaxProgress(thresholdSpeed);
 
         // Timer starten
@@ -98,30 +98,6 @@ public class SpeechSpeedActivityPresentation extends AppCompatActivity {
             startListening();
         }
 
-        // Zurück-Button in der Toolbar
-        ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent1 = new Intent(SpeechSpeedActivityPresentation.this, SpeechSpeedAdjustmentPresentation.class);
-            startActivity(intent1);
-
-            // Beende die aktuelle Aktivität
-            finish();
-        });
-
-        // Home-Button in der Toolbar
-        ImageView homeButton = findViewById(R.id.homeButton);
-        homeButton.setOnClickListener(v -> {
-            // Stoppe alle Hintergrundprozesse
-            stopBackgroundProcesses();
-
-            // Navigiere zur MainActivity und lösche den Aktivitäts-Stack
-            Intent intent2 = new Intent(SpeechSpeedActivityPresentation.this, MainActivity.class);
-            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent2);
-
-            // Beende die aktuelle Aktivität
-            finish();
-        });
 
         // Finish-Button (X) Listener hinzufügen
         ImageView finishButton = findViewById(R.id.finishButton);
@@ -162,19 +138,21 @@ public class SpeechSpeedActivityPresentation extends AppCompatActivity {
      * Beendet alle Hintergrundprozesse wie SpeechRecognizer und Vibrator.
      */
     private void stopBackgroundProcesses() {
-        // Stoppe den SpeechRecognizer
+        // Stoppe die Spracherkennung
         if (speechRecognizer != null) {
             speechRecognizer.stopListening();
-            speechRecognizer.cancel();
             speechRecognizer.destroy();
             speechRecognizer = null;
-            Log.d(TAG, "SpeechRecognizer gestoppt und zerstört.");
+        }
+
+        // Stoppe den Timer
+        if (timerHandler != null) {
+            timerHandler.removeCallbacksAndMessages(null);
         }
 
         // Stoppe den Vibrator, falls nötig
         if (vibrator != null) {
             vibrator.cancel();
-            Log.d(TAG, "Vibrator gestoppt.");
         }
 
         // Weitere Hintergrundprozesse können hier gestoppt werden
@@ -426,5 +404,23 @@ public class SpeechSpeedActivityPresentation extends AppCompatActivity {
         String[] words = text.trim().split("\\s+");
         return words.length;
     }
-}
 
+    @Override
+    protected void onDestroy() {
+        // Beende alle Hintergrundprozesse
+        stopBackgroundProcesses();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        stopBackgroundProcesses();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        stopBackgroundProcesses();
+        super.onStop();
+    }
+}

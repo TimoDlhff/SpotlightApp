@@ -6,8 +6,8 @@
 
     <!-- Toolbar -->
     <include
+        android:id="@+id/toolbar"
         layout="@layout/toolbar_header"
-        android:id="@+id/toolbarHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
@@ -16,7 +16,7 @@
     <RelativeLayout
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbarHeader"
+        android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:background="@drawable/timer_button_lila"
@@ -121,4 +121,3 @@
 
 
 </RelativeLayout>
-

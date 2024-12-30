@@ -1,5 +1,2 @@
 # Openfst doesn't like CR+LF
 words.txt -crlf
-# Git LFS tracking - nur für Sprachmodelle
-*.mdl filter=lfs diff=lfs merge=lfs -text
-*.fst filter=lfs diff=lfs merge=lfs -text

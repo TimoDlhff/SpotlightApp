@@ -82,7 +82,7 @@ public class StatisticsActivitySpeechSpeedPresentation extends BaseActivity {
         // Formatierung des Diagramms
         dataSet.setDrawValues(true);
         dataSet.setValueTextSize(16f);
-        dataSet.setValueTextColor(Color.WHITE);
+        dataSet.setValueTextColor(R.color.black);
         dataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {

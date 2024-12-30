@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -35,6 +35,7 @@ public class StatisticsActivitySpeechSpeed extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics_speechespeed);
         setupToolbar();
+
         // UI-Elemente initialisieren
         pieChart = findViewById(R.id.pieChart);
         pieChartDescription = findViewById(R.id.pieChartDescription);
@@ -46,43 +47,49 @@ public class StatisticsActivitySpeechSpeed extends BaseActivity {
 
         Log.d("StatisticsActivitySS", "FastSpeechPercentage: " + fastSpeechPercentage);
 
-        if (fastSpeechPercentage == 0f) {
-            Toast.makeText(this, "Keine Daten zur Sprachgeschwindigkeit verfügbar", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         // Kuchendiagramm einrichten
         setupPieChart();
 
         // Beschreibungstext aktualisieren
         updateDescription();
 
-
+        // Home Button Listener hinzufügen, falls benötigt
+        if (homeButton != null) {
+            homeButton.setOnClickListener(v -> {
+                Intent homeIntent = new Intent(StatisticsActivitySpeechSpeed.this, MainActivity.class);
+                startActivity(homeIntent);
+                finish();
+            });
+        }
     }
 
     private void setupPieChart() {
         List<PieEntry> entries = new ArrayList<>();
 
-        // Füge die Einträge hinzu (zu schnell und normal), gerundet auf ganze Zahlen
-        float normalSpeechPercentage = 100f - fastSpeechPercentage;
-        normalSpeechPercentage = Math.round(normalSpeechPercentage); // Auf ganze Zahl runden
-        fastSpeechPercentage = Math.round(fastSpeechPercentage);     // Auf ganze Zahl runden
+        // Berechne die Prozentsätze, aufgerundet
+        float roundedFastSpeechPercentage = Math.round(fastSpeechPercentage);
+        float roundedNormalSpeechPercentage = Math.round(100f - fastSpeechPercentage);
 
-        entries.add(new PieEntry(fastSpeechPercentage, "Zu schnell"));
-        entries.add(new PieEntry(normalSpeechPercentage, "Normal"));
+        // Falls fastSpeechPercentage > 100 oder <0, korrigiere es
+        roundedFastSpeechPercentage = clamp(roundedFastSpeechPercentage, 0f, 100f);
+        roundedNormalSpeechPercentage = clamp(roundedNormalSpeechPercentage, 0f, 100f);
+
+        // Füge Einträge hinzu, auch wenn sie 0 sind
+        entries.add(new PieEntry(roundedFastSpeechPercentage, "Zu schnell"));
+        entries.add(new PieEntry(roundedNormalSpeechPercentage, "Normal"));
 
         PieDataSet dataSet = new PieDataSet(entries, "");
 
         // Farben für die Segmente
         List<Integer> colors = new ArrayList<>();
-        colors.add(getResources().getColor(R.color.cyan));    // Zu schnell
-        colors.add(getResources().getColor(R.color.white));  // Normal
+        colors.add(ContextCompat.getColor(this, R.color.cyan));    // Zu schnell
+        colors.add(ContextCompat.getColor(this, R.color.white));  // Normal (statt Weiß, um Sichtbarkeit zu gewährleisten)
         dataSet.setColors(colors);
 
         // Formatierung des Diagramms
         dataSet.setDrawValues(true);
         dataSet.setValueTextSize(16f);
-        dataSet.setValueTextColor(Color.WHITE);
+        dataSet.setValueTextColor(Color.WHITE); // Sichtbare Farbe für die Werte
         dataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -100,7 +107,7 @@ public class StatisticsActivitySpeechSpeed extends BaseActivity {
         // Legende konfigurieren
         Legend legend = pieChart.getLegend();
         legend.setEnabled(true);
-        legend.setTextColor(Color.WHITE);
+        legend.setTextColor(Color.WHITE); // Sichtbare Farbe für die Legende
         legend.setTextSize(14f);
         legend.setFormSize(14f);
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
@@ -110,13 +117,20 @@ public class StatisticsActivitySpeechSpeed extends BaseActivity {
         legend.setXEntrySpace(40f); // Platz zwischen den Einträgen erhöhen
         legend.setYEntrySpace(10f);
 
-        pieChart.setEntryLabelColor(Color.WHITE);
+        pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(14f);
-        pieChart.setDrawEntryLabels(false);
+        pieChart.setDrawEntryLabels(false); // Je nach Design anpassen
 
         // Animation
         pieChart.animateY(1000);
         pieChart.invalidate();
+    }
+
+    /**
+     * Hilfsmethode zur Begrenzung von Werten.
+     */
+    private float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     private void updateDescription() {

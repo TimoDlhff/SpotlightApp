@@ -17,15 +17,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public class SpeechSpeedActivityTraining extends BaseActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
@@ -43,7 +48,7 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
 
     private ArrayList<Long> wordTimestamps = new ArrayList<>();
     private static final int TIME_WINDOW_MS = 5000;
-    private static final int INITIAL_DELAY_MS = 5000;
+    private static final int INITIAL_DELAY_MS = 3000; // Reduzierte initiale Verzögerung
     private static final int TOLERANCE_WPM = 5;
 
     private boolean isOutOfThreshold = false;
@@ -56,7 +61,19 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
 
     private boolean useWatchVibration = false;
     private static final String MESSAGE_PATH = "/message_path";
-    private int fastSpeechTimeSeconds = 0; // Variable für zu schnelles Sprechen
+    private static final String START_TIMER_PATH = "/start_timer"; // Neuer Pfad
+
+    // Neue Variablen zur genauen Erfassung der schnellen Sprechdauer
+    private long fastStartTime = 0; // Zeitpunkt, wann das schnelle Sprechen beginnt
+    private long fastDuration = 0;  // Gesamtdauer des schnellen Sprechens in Millisekunden
+
+    // Neue Variable zur Vermeidung der doppelten Wortzählung
+    private Set<String> previousWords = new HashSet<>();
+
+    // Handler und Runnable für die Vibration-Verzögerung
+    private Handler vibrationHandler = new Handler();
+    private Runnable vibrationRunnable;
+    private boolean vibrationScheduled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +83,15 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
 
         Intent intent = getIntent();
         thresholdSpeed = intent.getIntExtra("speech_speed", 120);
-        // UI-Elemente
+        useWatchVibration = intent.getBooleanExtra("useWatchVibration", false);
+
+        // UI-Elemente initialisieren
         outerCircle = findViewById(R.id.outerCircle);
         wpmNumber = findViewById(R.id.wpmNumber);
         wpmLabel = findViewById(R.id.wpmLabel);
         timerText = findViewById(R.id.timerText);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-        // Schwellenwert aus vorheriger Activity
-        thresholdSpeed = intent.getIntExtra("speech_speed", 120);
-        useWatchVibration = intent.getBooleanExtra("useWatchVibration", false);
         outerCircle.setMaxProgress(thresholdSpeed);
 
         // Timer starten
@@ -88,15 +104,24 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
             startListening();
         }
 
-
         // Finish-Button (X) Listener
         ImageView finishButton = findViewById(R.id.finishButton);
         finishButton.setOnClickListener(v -> {
             // Stoppe alle Hintergrundprozesse
             stopBackgroundProcesses();
 
+            // Falls das schnelle Sprechen gerade aktiv ist, die verbleibende Zeit hinzufügen
+            long currentTime = System.currentTimeMillis();
+            if (fastStartTime != 0) {
+                fastDuration += (currentTime - fastStartTime);
+                fastStartTime = 0;
+            }
+
             // Berechne den Prozentsatz zu schnelles Sprechen
-            float fastSpeechPercentage = (elapsedSeconds > 0) ? (fastSpeechTimeSeconds * 100f) / elapsedSeconds : 0f;
+            float fastSpeechPercentage = (elapsedSeconds > 0) ? (fastDuration / 1000f) * 100f / elapsedSeconds : 0f;
+
+            // Begrenzen auf 0-100%
+            fastSpeechPercentage = clamp(fastSpeechPercentage, 0f, 100f);
 
             // Navigiere zur StatisticsActivitySpeechSpeed
             Intent statsIntent = new Intent(SpeechSpeedActivityTraining.this, StatisticsActivitySpeechSpeed.class);
@@ -106,13 +131,25 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
             // Beende die aktuelle Aktivität
             finish();
         });
+
+        // Initialisierung des vibrationRunnable für die Cooldown-Reset
+        vibrationRunnable = new Runnable() {
+            @Override
+            public void run() {
+                vibrationScheduled = false;
+                // No action needed here since we reset vibrationScheduled
+            }
+        };
+
+        // Senden der Timer-Nachricht an die Smartwatch
+        sendStartTimerMessage();
     }
 
     /**
-     * Beendet alle Hintergrundprozesse wie SpeechRecognizer und entfernt Listener.
+     * Beendet alle Hintergrundprozesse wie SpeechRecognizer, Vibrator und geplante Vibrationen.
      */
     private void stopBackgroundProcesses() {
-        // Stoppe den SpeechRecognizer
+        // Stoppe die Spracherkennung
         if (speechRecognizer != null) {
             speechRecognizer.stopListening();
             speechRecognizer.cancel();
@@ -121,15 +158,48 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
             Log.d(TAG, "SpeechRecognizer gestoppt und zerstört.");
         }
 
+        // Stoppe den Timer
+        if (timerHandler != null) {
+            timerHandler.removeCallbacksAndMessages(null);
+        }
+
         // Stoppe den Vibrator, falls nötig
         if (vibrator != null) {
             vibrator.cancel();
             Log.d(TAG, "Vibrator gestoppt.");
         }
 
+        // Stoppe geplante Vibrationen
+        if (vibrationHandler != null) {
+            vibrationHandler.removeCallbacks(vibrationRunnable);
+        }
+
         // Weitere Hintergrundprozesse können hier gestoppt werden
     }
 
+    /**
+     * Startet den Timer, der die verstrichene Zeit in Sekunden zählt und fastDuration aktualisiert.
+     */
+    private void startTimer() {
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                elapsedSeconds++;
+                int minutes = elapsedSeconds / 60;
+                int seconds = elapsedSeconds % 60;
+                timerText.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                timerHandler.postDelayed(this, 1000);
+
+                // Kontinuierliche Aktualisierung von fastDuration
+                // Die Dauer wird bereits in checkSpeedThreshold gemessen
+            }
+        };
+        timerHandler.postDelayed(timerRunnable, 1000);
+    }
+
+    /**
+     * Initialisiert und startet den SpeechRecognizer.
+     */
     private void startListening() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -142,6 +212,7 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
             public void onReadyForSpeech(Bundle params) {
                 startTime = System.currentTimeMillis();
                 totalWords = 0;
+                previousWords.clear(); // Reset previous words when ready for speech
             }
 
             @Override
@@ -154,6 +225,11 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
 
             @Override
             public void onResults(Bundle results) {
+                // Verwenden von onResults statt onPartialResults für genauere Ergebnisse
+                ArrayList<String> resultData = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                if (resultData != null && !resultData.isEmpty()) {
+                    trackSpeechSpeed(resultData.get(0));
+                }
                 startListening(); // Kontinuierliches Zuhören
             }
 
@@ -165,7 +241,8 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
 
             @Override
             public void onEndOfSpeech() {
-                resetUI(); // Kreis zurücksetzen
+                // Entfernen des UI-Resets, um die WPM-Anzeige intakt zu halten
+                // resetUI(); // Entfernt, um WPM nicht zurückzusetzen bei Pausen
             }
 
             @Override
@@ -184,15 +261,32 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         speechRecognizer.startListening(intent);
     }
 
+    /**
+     * Verfolgt die Sprechgeschwindigkeit basierend auf dem gesprochenen Text.
+     *
+     * @param spokenText Der erkannte gesprochene Text
+     */
     private void trackSpeechSpeed(String spokenText) {
         long currentTime = System.currentTimeMillis();
-        int currentWordCount = spokenText.split("\\s+").length;
+        List<String> words = splitAndCleanWords(spokenText);
+        int currentWordCount = words.size();
 
-        for (int i = totalWords; i < currentWordCount; i++) {
-            wordTimestamps.add(currentTime);
+        // Finden der neuen Wörter seit dem letzten Update
+        List<String> newWords = new ArrayList<>();
+        for (String word : words) {
+            if (!previousWords.contains(word)) {
+                newWords.add(word);
+                previousWords.add(word);
+            }
         }
-        totalWords = currentWordCount;
 
+        // Hinzufügen von Zeitstempeln für neue Wörter
+        for (String word : newWords) {
+            wordTimestamps.add(currentTime);
+            totalWords++;
+        }
+
+        // Entfernen von Zeitstempeln außerhalb des Zeitfensters
         while (!wordTimestamps.isEmpty() && (currentTime - wordTimestamps.get(0)) > TIME_WINDOW_MS) {
             wordTimestamps.remove(0);
         }
@@ -214,6 +308,32 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         checkSpeedThreshold(wpm);
     }
 
+    /**
+     * Teilt den gesprochenen Text in Wörter auf und bereinigt sie.
+     *
+     * @param text Gesprochener Text
+     * @return Liste der bereinigten Wörter
+     */
+    private List<String> splitAndCleanWords(String text) {
+        List<String> cleanWords = new ArrayList<>();
+        if (text == null || text.isEmpty()) {
+            return cleanWords;
+        }
+        String[] words = text.trim().split("\\s+");
+        for (String word : words) {
+            String cleanWord = word.replaceAll("[^a-zA-ZäöüÄÖÜß]", "").toLowerCase();
+            if (!cleanWord.isEmpty()) {
+                cleanWords.add(cleanWord);
+            }
+        }
+        return cleanWords;
+    }
+
+    /**
+     * Aktualisiert die UI-Komponenten basierend auf der aktuellen WPM.
+     *
+     * @param wpm Wörter pro Minute
+     */
     private void updateUI(int wpm) {
         wpmNumber.setText(String.valueOf(wpm));
         wpmLabel.setText("WPM");
@@ -227,12 +347,11 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         }
     }
 
-    private void resetUI() {
-        wpmNumber.setText("0");
-        wpmLabel.setText("WPM");
-        outerCircle.setProgress(0);
-    }
-
+    /**
+     * Überprüft, ob die Sprechgeschwindigkeit außerhalb des festgelegten Schwellenwerts liegt.
+     *
+     * @param wpm Aktuelle Wörter pro Minute
+     */
     private void checkSpeedThreshold(int wpm) {
         long currentTime = System.currentTimeMillis();
         int lowerLimit = Math.max(0, thresholdSpeed - TOLERANCE_WPM);
@@ -242,16 +361,33 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
                 (thresholdSpeed <= 100 && wpm < lowerLimit) ||
                         (thresholdSpeed > 100 && wpm > upperLimit);
 
-        if (currentlyOutOfThreshold && !isOutOfThreshold) {
-            fastSpeechTimeSeconds++; // Erhöhe die Zeit bei zu schnellem Sprechen
-            if (currentTime - lastVibrationTime >= VIBRATION_COOLDOWN_MS) {
-                triggerVibration();
-                lastVibrationTime = currentTime;
+        if (currentlyOutOfThreshold) {
+            if (fastStartTime == 0) {
+                fastStartTime = currentTime; // Startzeitpunkt setzen
+
+                // Vibration sofort auslösen, wenn Cooldown abgelaufen ist und keine Vibration geplant ist
+                if (currentTime - lastVibrationTime >= VIBRATION_COOLDOWN_MS && !vibrationScheduled) {
+                    triggerVibration();
+                    vibrationScheduled = true;
+                    lastVibrationTime = currentTime;
+
+                    // Cooldown-Reset nach VIBRATION_COOLDOWN_MS Millisekunden
+                    vibrationHandler.postDelayed(vibrationRunnable, VIBRATION_COOLDOWN_MS);
+                }
+            }
+        } else {
+            if (fastStartTime != 0) {
+                fastDuration += (currentTime - fastStartTime); // Dauer hinzufügen
+                fastStartTime = 0; // Reset
             }
         }
+
         isOutOfThreshold = currentlyOutOfThreshold;
     }
 
+    /**
+     * Führt eine Vibration aus oder sendet eine Nachricht an die Smartwatch.
+     */
     private void triggerVibration() {
         if (useWatchVibration) {
             sendMessageToWatch("Zu schnell!");
@@ -266,6 +402,11 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         }
     }
 
+    /**
+     * Sendet eine Nachricht an die verbundene Smartwatch.
+     *
+     * @param message Die Nachricht, die gesendet werden soll
+     */
     private void sendMessageToWatch(String message) {
         Wearable.getNodeClient(this).getConnectedNodes()
                 .addOnSuccessListener(nodes -> {
@@ -286,6 +427,25 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
                 });
     }
 
+    /**
+     * Sendet eine Timer-Nachricht an die Smartwatch.
+     */
+    private void sendStartTimerMessage() {
+        String message = "start_timer"; // Zusätzliche Informationen können hinzugefügt werden
+        new Thread(() -> {
+            try {
+                List<Node> nodes = Tasks.await(Wearable.getNodeClient(getApplicationContext()).getConnectedNodes());
+                for (Node node : nodes) {
+                    Tasks.await(Wearable.getMessageClient(getApplicationContext()).sendMessage(
+                            node.getId(), START_TIMER_PATH, message.getBytes()
+                    ));
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -300,20 +460,6 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         }
     }
 
-    private void startTimer() {
-        timerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                elapsedSeconds++;
-                int minutes = elapsedSeconds / 60;
-                int seconds = elapsedSeconds % 60;
-                timerText.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
-                timerHandler.postDelayed(this, 1000);
-            }
-        };
-        timerHandler.postDelayed(timerRunnable, 1000);
-    }
-
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
@@ -325,27 +471,19 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         // Beende alle Hintergrundprozesse
         stopBackgroundProcesses();
 
+        // Entferne alle geplanten Vibrationen
+        vibrationHandler.removeCallbacks(vibrationRunnable);
+
+        // Entferne alle Timer-Callbacks
+        timerHandler.removeCallbacks(timerRunnable);
+
         super.finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    private void restartListening() {
-        if (speechRecognizer != null) {
-            // Stoppen der aktuellen Erkennung
-            speechRecognizer.stopListening();
-            speechRecognizer.cancel();
-            speechRecognizer.destroy();
-            speechRecognizer = null;
-            Log.d(TAG, "Spracherkennung gestoppt und zerstört.");
-        }
-
-        // Kurze Verzögerung, bevor die Erkennung neu startet
-        timerHandler.postDelayed(() -> {
-            startListening();
-            Log.d(TAG, "Spracherkennung neu gestartet.");
-        }, 500);
-    }
-
+    /**
+     * Diese Methode ist nicht mehr notwendig und kann entfernt werden.
+     */
     private int countWords(String text) {
         if (text == null || text.isEmpty()) {
             return 0;
@@ -360,4 +498,24 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         stopBackgroundProcesses();
         super.onDestroy();
     }
+
+    @Override
+    protected void onPause() {
+        stopBackgroundProcesses();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        stopBackgroundProcesses();
+        super.onStop();
+    }
+
+    /**
+     * Hilfsmethode zur Begrenzung von Werten.
+     */
+    private float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
+    }
 }
+

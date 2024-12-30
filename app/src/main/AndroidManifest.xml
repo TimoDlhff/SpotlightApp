@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.vosk.demo">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WearOSMessageApp">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".MessageSendActivity" android:exported="true"/>
+        <activity android:name=".FillerWordActivityPresentation" android:exported="true" />
+        <activity android:name=".SpeechSpeedActivityPresentation" android:exported="true" />
+        <activity android:name=".ModeSelectionActivity" android:exported="true" />
+        <activity android:name=".ModeSelectionTwoTrainingActivity" android:exported="true" />
+        <activity android:name=".FillerWordsAdjustmentTraining" android:exported="true" />
+        <activity android:name=".SpeechSpeedAdjustmentTraining" android:exported="true" />
+        <activity android:name=".SpeechSpeedAdjustmentPresentation" android:exported="true" />
+        <activity android:name=".ModeSelectionTwoPresentationActivity" android:exported="true" />
+        <activity android:name=".FillerWordAdjustmentPresentation" android:exported="true" />
+        <activity android:name=".DeviceSelectionPresentationActivity" android:exported="true" />
+        <activity android:name=".DeviceSelectionTrainingActivity" android:exported="true" />
+        <activity android:name=".FillerWordActivityTraining" android:exported="true" />
+        <activity android:name=".SpeechSpeedActivityTraining" android:exported="true" />
+        <activity android:name=".StatisticsActivityTraining" android:exported="true" />
+        <activity android:name=".StatisticsActivityPresentation" android:exported="true" />
+        <activity android:name=".StatisticsActivitySpeechSpeed" android:exported="true" />
+        <activity android:name=".StatisticsActivitySpeechSpeedPresentation" android:exported="true" />
+
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
+    </application>
+</manifest>

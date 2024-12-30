@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#292929">
+
+    <!-- Logo mittig oben -->
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <!-- Soundwave-Animation (HINTERGRUND) -->
+    <org.vosk.demo.SoundWaveView
+        android:id="@+id/soundWaveView"
+        android:layout_width="330dp"
+    android:layout_height="800dp"
+    android:layout_centerInParent="true"
+    android:layout_marginBottom="-80dp" />
+
+    <!-- Zusätzlicher Hintergrundlayer für Abstand -->
+    <RelativeLayout
+        android:id="@+id/spacerLayer"
+        android:layout_width="255dp"
+        android:layout_height="85dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rounded_button_spacer" />
+
+    <!-- Button Container (VORDERGRUND) -->
+    <RelativeLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rounded_button_border"
+        android:elevation="8dp">
+
+        <!-- Button Text -->
+        <TextView
+            android:id="@+id/buttonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEW SESSION"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <!-- Transparenter Button für Click-Events -->
+    <Button
+        android:id="@+id/newSessionButton"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent" />
+</RelativeLayout>

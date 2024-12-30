@@ -1,0 +1,231 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#202020"
+    android:padding="16dp">
+
+    <!-- Icon -->
+    <ImageView
+        android:id="@+id/appIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/training_mode"
+        />
+
+    <!-- Sprechgeschwindigkeit Label -->
+    <TextView
+        android:id="@+id/speedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Was ist deine bevorzugte Sprechgeschwindigkeit?"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+    <!-- Grauer Hintergrund für Regler -->
+    <LinearLayout
+        android:id="@+id/speedContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/speedLabel"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/rounded_button_starter_cyan"
+        android:padding="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp">
+
+        <SeekBar
+            android:id="@+id/speedSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="50"
+            android:max="100"
+            android:thumbTint="@color/cyan"
+            android:progressTint="@color/cyan" />
+    </LinearLayout>
+
+    <!-- Füllwörter Label -->
+    <TextView
+        android:id="@+id/fillerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/speedContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Welche Wörter möchtest du vermeiden?"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+    <!-- Grauer Hintergrund für Füllwörter -->
+    <LinearLayout
+        android:id="@+id/fillerWordsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fillerLabel"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_button_starter_cyan"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <!-- Erste Zeile: Standard Buttons -->
+        <LinearLayout
+            android:id="@+id/firstRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/word1Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_button_white"
+                android:text="ÄHM"
+                android:textColor="@color/cyan"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/word2Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_button_white"
+                android:text="GENAU"
+                android:textColor="@color/cyan"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Zweite Zeile: Weitere Buttons und Plus-Button -->
+        <LinearLayout
+            android:id="@+id/secondRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/word3Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_button_white"
+                android:text="GUT"
+                android:textColor="@color/cyan"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/addWordButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_button_empty"
+                android:text="+"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Eingabefeld Container -->
+    <LinearLayout
+        android:id="@+id/addWordContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fillerWordsContainer"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/addWordInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Neues Wort hinzufügen"
+            android:textColor="#000000"
+            android:background="@android:drawable/edit_text"
+            android:padding="8dp" />
+
+        <Button
+            android:id="@+id/confirmWordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="OK"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button_teal"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Geräteauswahl Label -->
+    <TextView
+        android:id="@+id/deviceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addWordContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Auf welchem Gerät möchtest du die Session laufen lassen?"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+    <!-- Geräteauswahl -->
+    <LinearLayout
+        android:id="@+id/deviceContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/deviceLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/smartphoneButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/rounded_button_starter_cyan"
+            android:text="SMARTPHONE"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/smartwatchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/rounded_button_starter_cyan"
+            android:text="SMARTWATCH"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Los geht's Button -->
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/deviceContainer"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_button_teal"
+        android:text="LOS GEHT'S!"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+</RelativeLayout>
+
+

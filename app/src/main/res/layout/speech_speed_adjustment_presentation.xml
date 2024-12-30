@@ -1,0 +1,132 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#292929"
+    android:padding="20dp">
+
+    <!-- Toolbar -->
+    <include
+        layout="@layout/toolbar_header"
+        android:id="@+id/toolbarHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <!-- Mikrofon-Icon klein -->
+    <ImageView
+        android:id="@+id/microphoneIconTop"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/toolbarHeader"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_presentation"
+        android:contentDescription="Microphone Icon" />
+
+    <!-- Titel "Speed" -->
+    <TextView
+        android:id="@+id/speedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/speedContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Speed"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- Geschwindigkeits-Container -->
+    <RelativeLayout
+        android:id="@+id/speedContainer"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rounded_button_starter_lila"
+        android:padding="20dp">
+
+        <!-- Schnecke-Icon links -->
+
+        <!-- Hase-Icon rechts -->
+
+        <!-- SeekBar mittig unter den Icons -->
+
+        <ImageView
+            android:id="@+id/snailIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignStart="@id/speedSeekBar"
+            android:layout_marginStart="14dp"
+            android:contentDescription="Slow Speed"
+            android:src="@drawable/ic_snail"
+            android:translationY="20dp" />
+
+        <ImageView
+            android:id="@+id/rabbitIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/speedSeekBar"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="Fast Speed"
+            android:src="@drawable/ic_rabbit"
+            android:translationY="20dp" />
+
+        <SeekBar
+            android:id="@+id/speedSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:max="100"
+        android:progress="50"
+        android:progressTint="@color/lila"
+        android:thumbTint="@color/lila"
+        android:thumb="@drawable/ic_custom_thumb"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp" />
+
+
+
+        <!-- Mittiger Text unter der SeekBar -->
+        <TextView
+            android:id="@+id/speedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/speedSeekBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="120 WPM: Optimal"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:gravity="center" />
+    </RelativeLayout>
+
+    <!-- Play-Button unten -->
+    <LinearLayout
+        android:id="@+id/playButtonContainer"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/rounded_button_starter_lila"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/startMicrophone"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_play_pres"
+            android:contentDescription="Start Microphone" />
+    </LinearLayout>
+</RelativeLayout>
+
+
+
+
+
+
+
+
+

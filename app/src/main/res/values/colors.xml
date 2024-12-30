@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Standardfarben -->
+
+    <color name="teal_200">#00E5FF</color>
+    <color name="blue_500">#555555</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="cyan">#00CADD</color>
+    <color name="lila">#949FFF</color>
+    <color name="grey">#454555</color>
+    <color name="darkGray">#121212</color>
+    <color name="purple_500">#FF6200EE</color>
+    <!-- Blau -->
+    <color name="blue_grey_700">#455A64</color> <!-- Optional für mehr Styling -->
+    <color name="background_dark">#121212</color> <!-- Dunkler Hintergrund -->
+    <color name="button_background">#454555</color>
+    <!-- Zusätzliche Farben -->
+    <color name="active_color">#4CAF50</color> <!-- Grün für aktive Buttons -->
+    <color name="inactive_color">#757575</color> <!-- Grau für inaktive Buttons -->
+</resources>

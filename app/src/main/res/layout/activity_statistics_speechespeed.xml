@@ -1,0 +1,47 @@
+<!-- res/layout/activity_statistics_speechespeed.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#292929"
+    android:padding="20dp">
+
+    <!-- Kreisdiagramm in der Mitte (größer gemacht) -->
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:layout_centerInParent="true"
+    android:background="@android:color/transparent" />
+
+    <!-- Text unter dem PieChart -->
+    <TextView
+        android:id="@+id/pieChartDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zu schnell gesprochen: 10%"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+    android:textStyle="bold"
+    android:layout_below="@id/pieChart"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="24dp" />
+
+    <!-- Home-Button am unteren Rand, zentriert -->
+    <ImageView
+        android:id="@+id/homeButton"
+        android:layout_width="140dp"
+    android:layout_height="56dp"
+    android:padding="8dp"
+    android:src="@drawable/ic_home"
+    android:contentDescription="@string/home"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/home_button_background"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="24dp" />
+
+</RelativeLayout>
+
+
+

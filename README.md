@@ -1,6 +1,6 @@
 # VocalWave 🎤
 
-VocalWave ist eine coole Android-App für bessere Präsentationen. Mit Echtzeit-Spracherkennung und dezenten Vibrationen hilft die App dabei, professioneller und überzeugender zu präsentieren.
+VocalWave ist eine Android-App für bessere Präsentationen. Mit Echtzeit-Spracherkennung und dezenten Vibrationen hilft die App dabei, professioneller und überzeugender zu präsentieren.
 
 ## Features ✨
 
@@ -27,8 +27,13 @@ VocalWave ist eine coole Android-App für bessere Präsentationen. Mit Echtzeit-
 - Macht Fortschritte über Zeit sichtbar
 
 ### 5. Zwei Modi
-- Präsentationsmodus: Dezentes Feedback für den Ernstfall
-- Trainingsmodus: Intensives Feedback zum Üben
+- Präsentationsmodus: Dezentes Feedback für den Ernstfall - vibriert nicht bei jedem Fehler, um nicht zu stören
+- Trainingsmodus: Intensives Feedback zum Üben - meldet jeden Fehler sofort
+
+### 6. Smartwatch Support
+- Wear OS App muss auf der Smartwatch installiert und geöffnet sein
+- In VocalWave auf dem Handy "Smartwatch" als Feedback-Methode auswählen
+- Perfekt für dezentes Feedback während der Präsentation
 
 ## Installation 🚀
 

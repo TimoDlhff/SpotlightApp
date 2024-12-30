@@ -78,6 +78,9 @@ public class FillerWordActivityTraining extends BaseActivity implements Recognit
         visualizerView = findViewById(R.id.audioVisualizer);
         timerTextView = findViewById(R.id.timerText);
 
+        // Timer starten
+        startTimer();
+
         // Toolbar Setup
         setupToolbar();
 
@@ -413,5 +416,23 @@ public class FillerWordActivityTraining extends BaseActivity implements Recognit
         // Beende alle Hintergrundprozesse
         stopBackgroundProcesses();
         super.onDestroy();
+    }
+
+    private void startTimer() {
+        Runnable timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                timerSeconds++;
+                int minutes = timerSeconds / 60;
+                int seconds = timerSeconds % 60;
+                if (timerTextView != null) {
+                    runOnUiThread(() -> {
+                        timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
+                    });
+                }
+                timerHandler.postDelayed(this, 1000);
+            }
+        };
+        timerHandler.postDelayed(timerRunnable, 1000);
     }
 }

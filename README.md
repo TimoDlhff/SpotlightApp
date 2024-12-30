@@ -27,36 +27,30 @@ VocalWave ist eine innovative Android-App, die Ihnen hilft, Ihre Präsentationsf
 
 ## Installation
 
-### 1. Git LFS Setup (nur einmalig pro Computer)
-Wenn Sie Git LFS noch nicht installiert haben:
-
-1. Installieren Sie Git LFS:
-   - **Mac**: `brew install git-lfs`
-   - **Windows**: Laden Sie den Installer von https://git-lfs.github.com herunter
-   - **Linux**: `sudo apt-get install git-lfs`
-
-2. Aktivieren Sie Git LFS (einmalig):
-   ```bash
-   git lfs install
-   ```
-
-### 2. Projekt klonen
+### 1. Projekt klonen
 ```bash
 git clone https://github.com/TimoDlhff/VocalWaveApp.git
 ```
-Die Sprachmodelle werden automatisch über Git LFS heruntergeladen.
+
+### 2. Projekt in Android Studio öffnen
+1. Starten Sie Android Studio
+2. Wählen Sie "Open an existing Android Studio project"
+3. Navigieren Sie zum geklonten VocalWaveApp-Verzeichnis und öffnen Sie es
 
 ### 3. Projekt einrichten
-1. Öffnen Sie das Projekt in Android Studio
-2. Synchronisieren Sie das Projekt mit Gradle
+1. Warten Sie, bis Android Studio das Projekt vollständig geladen hat
+2. Klicken Sie auf "Sync Project with Gradle Files" (das Elephant-Symbol in der Toolbar)
+3. Warten Sie, bis die Synchronisierung abgeschlossen ist
+
+### 4. App auf Ihrem Gerät installieren
+1. Verbinden Sie Ihr Android-Gerät via USB mit dem Computer
+2. Aktivieren Sie auf Ihrem Gerät den "Entwicklermodus" und "USB-Debugging"
+3. Wählen Sie in Android Studio Ihr Gerät aus der Geräteliste
+4. Klicken Sie auf den "Run"-Button (grüner Play-Button)
 
 ## Technische Details
 
-- Offline-Spracherkennung basierend auf Kaldi und Vosk
-- Die Sprachmodelle (`.mdl` und `.fst` Dateien) werden über Git LFS verwaltet
-- Lokaler Pfad der Modelle: `models/src/main/assets/`
-- Unterstützte Sprachen: Deutsch und Englisch
-- Wear OS Integration für Smartwatch-Feedback
+Die App verwendet das VOSK-Spracherkennungsmodell für die deutsche Sprache. Das Modell ist bereits im Repository enthalten und wird automatisch mit dem Projekt heruntergeladen (ca. 88 MB).
 
 ## Systemanforderungen
 

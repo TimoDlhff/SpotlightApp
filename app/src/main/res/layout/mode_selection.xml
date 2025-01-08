@@ -1,10 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#292929"
     android:padding="20dp">
 
-    <!-- Toolbar oben eingebunden -->
+    <!-- Toolbar -->
     <include
         layout="@layout/toolbar_header"
         android:id="@+id/toolbarHeader"
@@ -12,158 +13,185 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-    <!-- Container für die zwei Auswahlmöglichkeiten -->
+    <!-- Container für beide Karten -->
     <LinearLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp">
+        android:orientation="vertical">
 
-        <!-- Presentation Mode -->
+        <!-- Presentation Mode Card -->
         <LinearLayout
             android:id="@+id/presentationModeCard"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="190dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_button_stroke_lila"
             android:orientation="horizontal"
-            android:padding="10dp"
-            android:layout_marginBottom="20dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
-            <!-- Linke Hälfte mit Icon -->
+            <!-- Linke Hälfte (Icon) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:paddingEnd="8dp">
+                android:gravity="center">
 
-                <!-- Innerer Kasten für das Icon -->
-                <LinearLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/rounded_inner_box_lila"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/ic_presentation"
-                        android:contentDescription="Presentation Icon" />
-                </LinearLayout>
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/ic_presentation" />
             </LinearLayout>
 
-            <!-- Rechte Hälfte mit Text -->
+            <!-- Rechte Hälfte (Text) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|start"
-                android:paddingStart="10dp">
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:paddingEnd="16dp">
 
-                <!-- Textbereich rechts -->
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="start">
+                    android:text="Presentation"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textFontWeight="700"
+                    android:fontFamily="@font/roboto_font_family" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Presentation"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="Helps you feel secure and competent while still noticing you about mistakes from time to time"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Helps you feel secure and competent while still noticing you about mistakes from time to time"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textFontWeight="300"
+                    android:fontFamily="@font/roboto_font_family" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Training Mode -->
+        <!-- Training Mode Card (gleicher Aufbau) -->
         <LinearLayout
             android:id="@+id/trainingModeCard"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="190dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/rounded_button_stroke_cyan"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
-            <!-- Linke Hälfte mit Text -->
+            <!-- Linke Hälfte (Icon) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:paddingEnd="10dp">
+                android:gravity="center">
 
-                <!-- Textbereich links -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="end">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Training"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="This is hard mode. Every mistake counts. You will inevitably get better."
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:gravity="end" /> <!-- Text rechtsbündig -->
-                </LinearLayout>
-
-
-
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/training_mode"/>
             </LinearLayout>
 
-            <!-- Rechte Hälfte mit Icon -->
+            <!-- Rechte Hälfte (Text) -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|start"
-                android:paddingStart="8dp">
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:paddingEnd="16dp">
 
-                <!-- Innerer Kasten für das Icon -->
-                <LinearLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/rounded_inner_box_cyan"
-                    android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Training"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textFontWeight="700"
+                    android:fontFamily="@font/roboto_font_family" />
 
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/training_mode"
-                        android:contentDescription="Training Icon" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="This is hard mode. Every mistake counts. You will inevitably get better."
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textFontWeight="300"
+                    android:fontFamily="@font/roboto_font_family" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Fortschritts-Anzeige am untersten Rand (Außerhalb des LinearLayouts!) -->
+    <LinearLayout
+        android:id="@+id/progressContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- ERSTER PUNKT (z.B. gefüllter Kreis in Weiß) -->
+        <View
+            android:id="@+id/step1"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+
+            android:background="@drawable/circle_filled_white" />
+
+        <!-- Linie zwischen Punkt 1 und 2 -->
+        <View
+            android:id="@+id/line1"
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+
+            android:background="@android:color/white" />
+
+        <!-- ZWEITER PUNKT -->
+        <View
+            android:id="@+id/step2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+
+            android:background="@drawable/circle_inactive" />
+
+        <!-- Linie zwischen Punkt 2 und 3 -->
+        <View
+            android:id="@+id/line2"
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+
+            android:background="@android:color/white" />
+
+        <!-- DRITTER PUNKT -->
+        <View
+            android:id="@+id/step3"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+
+            android:background="@drawable/circle_inactive" />
+    </LinearLayout>
 </RelativeLayout>
+
+
+
 
 
 

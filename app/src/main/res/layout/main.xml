@@ -23,15 +23,15 @@
     <!-- Zusätzlicher Hintergrundlayer für Abstand -->
     <RelativeLayout
         android:id="@+id/spacerLayer"
-        android:layout_width="255dp"
-        android:layout_height="85dp"
+        android:layout_width="230dp"
+        android:layout_height="80dp"
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_button_spacer" />
 
     <!-- Button Container (VORDERGRUND) -->
     <RelativeLayout
         android:id="@+id/buttonContainer"
-        android:layout_width="250dp"
+        android:layout_width="230dp"
         android:layout_height="80dp"
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_button_border"
@@ -42,9 +42,9 @@
             android:id="@+id/buttonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NEW SESSION"
+            android:text="New Session"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:layout_centerInParent="true" />
     </RelativeLayout>

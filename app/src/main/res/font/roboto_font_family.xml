@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Normale Schrift (Weight 400) -->
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_regular" />
+
+    <!-- Leichte Schrift (Weight 300) -->
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="300"
+        android:font="@font/roboto_light" />
+
+    <!-- Fette Schrift (Weight 700) -->
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        android:font="@font/roboto_bold" />
+
+    <!-- Normale Kursiv (Weight 400, Style italic) -->
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="400"
+        android:font="@font/roboto_italic" />
+
+    <!-- Leichte Kursiv (Weight 300, Style italic) -->
+    <!-- Entweder benutzt du hier wieder @font/roboto_light,
+         dann wird sie nur künstlich geneigt,
+         oder du hast eine echte Light-Italic-Datei @font/roboto_light_italic -->
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="300"
+        android:font="@font/roboto_light" />
+</font-family>
+
+
+

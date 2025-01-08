@@ -1,18 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/purple_500"/>
-    <foreground>
-        <vector
-            android:width="108dp"
-            android:height="108dp"
-            android:viewportWidth="108"
-            android:viewportHeight="108">
-            <path
-                android:fillColor="@color/white"
-                android:pathData="M44,54L64,54"
-                android:strokeWidth="6"
-                android:strokeColor="@color/white"
-                android:strokeLineCap="round"/>
-        </vector>
-    </foreground>
+    <!-- Hintergrund: Hex-Farbwert -->
+    <background android:drawable="@color/grey" />
+
+    <!-- Vordergrund: PNG-Datei für das Logo -->
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
 </adaptive-icon>

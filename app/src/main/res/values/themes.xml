@@ -11,6 +11,10 @@
 
         <!-- App background -->
         <item name="android:windowBackground">@color/background_dark</item>
+
+        <!-- Default font -->
+        <item name="android:fontFamily">@font/roboto_font_family</item>
+        <item name="fontFamily">@font/roboto_font_family</item>
     </style>
 
     <style name="Theme.MyApp.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -24,5 +28,10 @@
 
         <!-- Hintergrund der App -->
         <item name="android:windowBackground">@color/background_dark</item>
+
+        <!-- Default font -->
+        <item name="android:fontFamily">@font/roboto_font_family</item>
+        <item name="fontFamily">@font/roboto_font_family</item>
     </style>
 </resources>
+

@@ -34,7 +34,8 @@
         android:text="Fillwords"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:fontFamily="@font/roboto_font_family"
+        android:textFontWeight="700" />
 
     <!-- Container für Wörter-Auswahl -->
     <LinearLayout
@@ -62,6 +63,8 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/rounded_button_empty"
                 android:text="Ähm"
+                android:fontFamily="@font/roboto_font_family"
+                android:textFontWeight="500"
                 android:textColor="@color/white" />
 
             <Button
@@ -71,6 +74,8 @@
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:background="@drawable/rounded_button_empty"
+                android:fontFamily="@font/roboto_font_family"
+                android:textFontWeight="500"
                 android:text="Gut"
                 android:textColor="@color/white" />
         </LinearLayout>
@@ -90,6 +95,8 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/rounded_button_empty"
                 android:text="Genau"
+                android:fontFamily="@font/roboto_font_family"
+                android:textFontWeight="500"
                 android:textColor="@color/white" />
 
             <Button
@@ -100,7 +107,9 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/rounded_button_empty"
                 android:text="+"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_font_family"
+                android:textFontWeight="500"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -112,7 +121,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/rounded_button_starter_lila"
+        android:background="@drawable/rounded_button_stroke_lila"
         android:gravity="center">
 
         <ImageView
@@ -120,8 +129,10 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_play_pres"
-            android:contentDescription="Start Microphone" />
+            android:contentDescription="Start Microphone"
+            android:layout_marginStart="10dp" /> <!-- Verschiebung nach rechts -->
     </LinearLayout>
+
 
 </RelativeLayout>
 

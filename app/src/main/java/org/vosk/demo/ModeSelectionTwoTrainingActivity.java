@@ -1,6 +1,7 @@
 package org.vosk.demo;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,12 +22,13 @@ public class ModeSelectionTwoTrainingActivity extends BaseActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
+
         });
 
 
 
         // Button für Sprechgeschwindigkeit
-        LinearLayout speedModeCard = findViewById(R.id.speedModeCard);
+        LinearLayout speedModeCard = findViewById(R.id.firstCard);
         speedModeCard.setOnClickListener(v -> {
             Intent intent = new Intent(ModeSelectionTwoTrainingActivity.this, DeviceSelectionTrainingActivity.class);
             intent.putExtra("mode", "speed");
@@ -34,7 +36,7 @@ public class ModeSelectionTwoTrainingActivity extends BaseActivity {
         });
 
         // Button für Füllwörter
-        LinearLayout fillerWordsModeCard = findViewById(R.id.fillerWordsModeCard);
+        LinearLayout fillerWordsModeCard = findViewById(R.id.secondCard);
         fillerWordsModeCard.setOnClickListener(v -> {
             Intent intent = new Intent(ModeSelectionTwoTrainingActivity.this, DeviceSelectionTrainingActivity.class);
             intent.putExtra("mode", "filler_words");

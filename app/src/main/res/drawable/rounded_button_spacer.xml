@@ -1,4 +1,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#202020" /> <!-- Hintergrundfarbe -->
+    <solid android:color="#292929" /> <!-- Hintergrundfarbe -->
     <corners android:radius="50dp" /> <!-- Rundungen des Buttons -->
 </shape>

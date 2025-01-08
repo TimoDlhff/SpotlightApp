@@ -2,6 +2,7 @@ package org.vosk.demo;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -133,7 +134,7 @@ public class SpeechSpeedActivityPresentation extends BaseActivity {
             fastSpeechPercentage = clamp(fastSpeechPercentage, 0f, 100f);
 
             // Navigiere zur StatisticsActivitySpeechSpeed
-            Intent statsIntent = new Intent(SpeechSpeedActivityPresentation.this, StatisticsActivitySpeechSpeed.class);
+            Intent statsIntent = new Intent(SpeechSpeedActivityPresentation.this, StatisticsActivitySpeechSpeedPresentation.class);
             statsIntent.putExtra("fastSpeechPercentage", fastSpeechPercentage);
             startActivity(statsIntent);
 

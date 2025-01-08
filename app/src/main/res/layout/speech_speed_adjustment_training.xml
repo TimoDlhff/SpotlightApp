@@ -99,7 +99,9 @@
             android:text="120 WPM: Optimal"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:fontFamily="@font/roboto_font_family"
+            android:textFontWeight="500"/>
     </RelativeLayout>
 
     <!-- Play-Button unten -->
@@ -110,7 +112,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/rounded_button_starter_cyan"
+        android:background="@drawable/rounded_button_stroke_cyan"
         android:gravity="center">
 
         <ImageView
@@ -118,6 +120,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_play_cyan"
-            android:contentDescription="Start Microphone" />
+            android:contentDescription="Start Microphone"
+            android:layout_marginStart="10dp"/>
     </LinearLayout>
 </RelativeLayout>

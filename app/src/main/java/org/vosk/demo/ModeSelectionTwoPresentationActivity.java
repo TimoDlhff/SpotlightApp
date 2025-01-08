@@ -1,6 +1,7 @@
 package org.vosk.demo;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,11 +22,12 @@ public class ModeSelectionTwoPresentationActivity extends BaseActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
+
         });
 
 
         // Button für Sprechgeschwindigkeit
-        LinearLayout speedModeCard = findViewById(R.id.speedModeCard);
+        LinearLayout speedModeCard = findViewById(R.id.firstCard);
         speedModeCard.setOnClickListener(v -> {
             Intent intent = new Intent(ModeSelectionTwoPresentationActivity.this, DeviceSelectionPresentationActivity.class);
             intent.putExtra("mode", "speed"); // Speichert "speed" als Parameter
@@ -33,7 +35,7 @@ public class ModeSelectionTwoPresentationActivity extends BaseActivity {
         });
 
         // Button für Füllwörter
-        LinearLayout fillerWordsModeCard = findViewById(R.id.fillerWordsModeCard);
+        LinearLayout fillerWordsModeCard = findViewById(R.id.secondCard);
         fillerWordsModeCard.setOnClickListener(v -> {
             Intent intent = new Intent(ModeSelectionTwoPresentationActivity.this, DeviceSelectionPresentationActivity.class);
             intent.putExtra("mode", "filler_words"); // Speichert "filler_words" als Parameter

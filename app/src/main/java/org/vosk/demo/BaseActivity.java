@@ -1,6 +1,7 @@
 package org.vosk.demo;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -34,6 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         handler = new Handler();
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.activity_main);
     }
 
     /**

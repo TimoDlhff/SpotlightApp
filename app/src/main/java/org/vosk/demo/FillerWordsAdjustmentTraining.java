@@ -1,6 +1,7 @@
 package org.vosk.demo;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -87,22 +88,39 @@ public class FillerWordsAdjustmentTraining extends BaseActivity{
             return;
         }
 
+        // Erstelle ein LinearLayout als Container
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        int padding = dpToPx(20); // 20dp Padding auf allen Seiten
+        container.setPadding(padding, padding, padding, padding);
+
         EditText inputField = new EditText(this);
         inputField.setHint("Neues Wort eingeben");
-        inputField.setHintTextColor(Color.LTGRAY); // Hint-Text in hellem Grau
-        inputField.setTextColor(Color.WHITE); // Textfarbe auf Weiß setzen
+        inputField.setHintTextColor(Color.LTGRAY);    // Hint-Text in hellem Grau
+        inputField.setTextColor(Color.WHITE);         // Textfarbe auf Weiß
         inputField.setBackgroundResource(R.drawable.rounded_input_background);
 
-        // Layout-Parameter für Abstand hinzufügen
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+        // Innerer Abstand (Padding) links für den Placeholder/Text
+        int paddingLeftPx = dpToPx(15); // 15dp in Pixel umwandeln
+        inputField.setPadding(
+                paddingLeftPx,
+                inputField.getPaddingTop(),
+                inputField.getPaddingRight(),
+                inputField.getPaddingBottom()
+        );
+
+        // Füge das EditText zum Container hinzu
+        LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 20, 0, 0); // Abstand von oben (20dp)
-        inputField.setLayoutParams(params);
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        inputField.setLayoutParams(inputParams);
+
+        container.addView(inputField);
 
         new AlertDialog.Builder(this, R.style.CustomDialogTheme)
                 .setTitle("Wort hinzufügen")
-                .setView(inputField)
+                .setView(container)
                 .setNegativeButton("Abbrechen", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("Hinzufügen", (dialog, which) -> {
                     String newWord = inputField.getText().toString().trim();
@@ -110,6 +128,12 @@ public class FillerWordsAdjustmentTraining extends BaseActivity{
                 })
                 .show();
     }
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
+    }
+
 
     // Neues Wort hinzufügen, maximal 3 Wörter, "+" Button bleibt immer das letzte Element
     private void addNewWordButton(String word) {

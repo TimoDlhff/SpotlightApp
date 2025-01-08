@@ -5,7 +5,5 @@
     <!-- Hintergrundfarbe -->
     <solid android:color="#454555" />
     <!-- Rahmen -->
-    <stroke
-        android:width="2dp"
-        android:color="#00CADD" />
+
 </shape>

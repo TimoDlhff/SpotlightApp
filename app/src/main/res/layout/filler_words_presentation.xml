@@ -55,7 +55,7 @@
         android:layout_height="300dp"
         android:layout_centerInParent="true" />
 
-    <!-- Ergebnis-Text unten -->
+
     <TextView
         android:id="@+id/result_text"
         android:layout_width="wrap_content"
@@ -67,7 +67,8 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/finishButton"

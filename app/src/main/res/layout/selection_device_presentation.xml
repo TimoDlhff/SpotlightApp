@@ -1,10 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#292929"
     android:padding="20dp">
 
-    <!-- Toolbar oben eingebunden -->
+    <!-- Toolbar -->
     <include
         layout="@layout/toolbar_header"
         android:id="@+id/toolbarHeader"
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-    <!-- Mikrofon-Icon -->
+    <!-- Mikrofon-Icon (z.B. ic_presentation o.ä.) -->
     <ImageView
         android:id="@+id/microphoneIcon"
         android:layout_width="60dp"
@@ -23,154 +24,178 @@
         android:src="@drawable/ic_presentation"
         android:contentDescription="Microphone Icon" />
 
-    <!-- Container für die zwei Auswahlmöglichkeiten -->
+    <!-- Container für beide Karten -->
     <LinearLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <!-- Handy Mode -->
+        <!-- Handy Mode Card -->
         <LinearLayout
             android:id="@+id/handyModeCard"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="190dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_button_stroke_lila"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
-            <!-- Linke Hälfte mit Icon -->
+            <!-- Linke Hälfte (Icon) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:paddingEnd="8dp">
+                android:gravity="center">
 
-                <!-- Innerer Kasten für das Icon -->
-                <LinearLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/rounded_inner_box_lila"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/ic_phone"
-                        android:contentDescription="Phone Icon" />
-                </LinearLayout>
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_phone"
+                    android:contentDescription="Phone Icon" />
             </LinearLayout>
 
-            <!-- Rechte Hälfte mit Text -->
+            <!-- Rechte Hälfte (Text) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|start"
-                android:paddingStart="10dp">
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
 
-                <!-- Textbereich rechts -->
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="start">
+                    android:text="Phone"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Phone"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="Continue your progress on the phone."
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Continue your progress on the phone."
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Watch Mode -->
+        <!-- Watch Mode Card -->
         <LinearLayout
             android:id="@+id/watchModeCard"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="190dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/rounded_button_stroke_lila"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
-            <!-- Linke Hälfte mit Text -->
+            <!-- Linke Hälfte (Icon) oder Text – laut Code: Text links, Icon rechts.
+                 Du wolltest allerdings überall denselben Aufbau (Icon links, Text rechts)?
+                 Ich passe es nun an, damit Icon links ist und Text rechts (konsistent zum Handy Mode).
+            -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:paddingEnd="8dp">
+                android:gravity="center">
 
-                <!-- Textbereich links -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="end">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Smartwatch"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="Sync your progress on your smartwatch."
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:gravity="end" />
-                </LinearLayout>
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_watch"
+                    android:contentDescription="Watch Icon" />
             </LinearLayout>
 
-            <!-- Rechte Hälfte mit Icon -->
+            <!-- Rechte Hälfte (Text) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical|start"
-                android:paddingStart="8dp">
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
 
-                <!-- Innerer Kasten für das Icon -->
-                <LinearLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/rounded_inner_box_lila"
-                    android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Smartwatch"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/ic_watch"
-                        android:contentDescription="Watch Icon" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Sync your progress on your smartwatch."
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+    <!-- Fortschritts-Anzeige am untersten Rand (Außerhalb des LinearLayouts!) -->
+    <LinearLayout
+        android:id="@+id/progressContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- ERSTER PUNKT (z.B. gefüllter Kreis in Weiß) -->
+        <View
+            android:id="@+id/step1"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+
+            android:background="@drawable/circle_filled_white" />
+
+        <!-- Linie zwischen Punkt 1 und 2 -->
+        <View
+            android:id="@+id/line1"
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+
+            android:background="@android:color/white" />
+
+        <!-- ZWEITER PUNKT -->
+        <View
+            android:id="@+id/step2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+
+            android:background="@drawable/circle_filled_white" />
+
+        <!-- Linie zwischen Punkt 2 und 3 -->
+        <View
+            android:id="@+id/line2"
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+
+            android:background="@android:color/white" />
+
+        <!-- DRITTER PUNKT -->
+        <View
+            android:id="@+id/step3"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+
+            android:background="@drawable/circle_filled_white" />
+    </LinearLayout>
 </RelativeLayout>
+
 
 

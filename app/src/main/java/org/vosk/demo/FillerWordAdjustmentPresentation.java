@@ -3,15 +3,15 @@ package org.vosk.demo;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
@@ -26,14 +26,14 @@ public class FillerWordAdjustmentPresentation extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.filler_words_adjustment_presentation); // Korrektes Layout!
+        setContentView(R.layout.filler_words_adjustment_presentation);
         setupToolbar();
-        // Vorherige Auswahl aus Intent laden
+
+        // Daten aus Intent
         String mode = getIntent().getStringExtra("mode");
         useWatchVibration = getIntent().getBooleanExtra("useWatchVibration", false);
 
-
-        // UI-Elemente initialisieren
+        // UI-Elemente
         fillerWordsContainer = findViewById(R.id.fillerWordsContainer);
         word1Button = findViewById(R.id.word1Button);
         word2Button = findViewById(R.id.word2Button);
@@ -44,13 +44,14 @@ public class FillerWordAdjustmentPresentation extends BaseActivity {
         setupWordButton(word1Button, "Ähm");
         setupWordButton(word2Button, "Gut");
         setupWordButton(word3Button, "Genau");
+
         addWordButton.setOnClickListener(v -> showAddWordDialog());
 
-        // Aktuelle Zeile für Buttons erstellen
+        // Aktuelle Zeile für Buttons
         currentRow = createNewRow();
         fillerWordsContainer.addView(currentRow);
 
-        // Start-Mikrofon Button unten
+        // Start-Mikrofon
         findViewById(R.id.startMicrophone).setOnClickListener(v -> {
             if (selectedWords.isEmpty()) {
                 Toast.makeText(this, "Keine Wörter ausgewählt!", Toast.LENGTH_SHORT).show();
@@ -85,22 +86,39 @@ public class FillerWordAdjustmentPresentation extends BaseActivity {
             return;
         }
 
+        // Erstelle ein LinearLayout als Container
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        int padding = dpToPx(20); // 20dp Padding auf allen Seiten
+        container.setPadding(padding, padding, padding, padding);
+
         EditText inputField = new EditText(this);
         inputField.setHint("Neues Wort eingeben");
-        inputField.setHintTextColor(Color.LTGRAY); // Hint-Text in hellem Grau
-        inputField.setTextColor(Color.WHITE); // Textfarbe auf Weiß setzen
+        inputField.setHintTextColor(Color.LTGRAY);    // Hint-Text in hellem Grau
+        inputField.setTextColor(Color.WHITE);         // Textfarbe auf Weiß
         inputField.setBackgroundResource(R.drawable.rounded_input_background);
 
-        // Layout-Parameter für Abstand hinzufügen
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+        // Innerer Abstand (Padding) links für den Placeholder/Text
+        int paddingLeftPx = dpToPx(15); // 15dp in Pixel umwandeln
+        inputField.setPadding(
+                paddingLeftPx,
+                inputField.getPaddingTop(),
+                inputField.getPaddingRight(),
+                inputField.getPaddingBottom()
+        );
+
+        // Füge das EditText zum Container hinzu
+        LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 20, 0, 0); // Abstand von oben (20dp)
-        inputField.setLayoutParams(params);
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        inputField.setLayoutParams(inputParams);
+
+        container.addView(inputField);
 
         new AlertDialog.Builder(this, R.style.CustomDialogTheme)
                 .setTitle("Wort hinzufügen")
-                .setView(inputField)
+                .setView(container)
                 .setNegativeButton("Abbrechen", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("Hinzufügen", (dialog, which) -> {
                     String newWord = inputField.getText().toString().trim();
@@ -108,6 +126,9 @@ public class FillerWordAdjustmentPresentation extends BaseActivity {
                 })
                 .show();
     }
+
+
+
 
 
     private void addNewWordButton(String word) {
@@ -181,6 +202,11 @@ public class FillerWordAdjustmentPresentation extends BaseActivity {
         }
     }
 
+    private int dpToPx(int dp) {
+        float scale = getResources().getDisplayMetrics().density;
+        return Math.round(dp * scale);
+    }
+
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
@@ -192,7 +218,6 @@ public class FillerWordAdjustmentPresentation extends BaseActivity {
         super.finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
-
 }
 
 

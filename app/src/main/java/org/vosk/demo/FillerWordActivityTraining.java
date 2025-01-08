@@ -2,6 +2,7 @@ package org.vosk.demo;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -249,7 +250,7 @@ public class FillerWordActivityTraining extends BaseActivity implements Recognit
         } else {
             // Nur Handy-Vibration
             if (vibrator != null) {
-                vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
             }
         }
 

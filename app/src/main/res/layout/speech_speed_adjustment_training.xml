@@ -59,7 +59,7 @@
             android:layout_marginStart="14dp"
             android:contentDescription="Slow Speed"
             android:src="@drawable/ic_snail"
-            android:translationY="20dp" />
+            android:translationY="18dp" />
 
         <ImageView
             android:id="@+id/rabbitIcon"
@@ -69,7 +69,7 @@
             android:layout_marginEnd="8dp"
             android:contentDescription="Fast Speed"
             android:src="@drawable/ic_rabbit"
-            android:translationY="20dp" />
+            android:translationY="18dp" />
 
         <SeekBar
             android:id="@+id/speedSeekBar"

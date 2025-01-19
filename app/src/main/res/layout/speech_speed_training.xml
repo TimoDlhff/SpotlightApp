@@ -105,20 +105,19 @@
     <!-- Finish-Button (X) -->
     <ImageView
         android:id="@+id/finishButton"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="50dp"
         android:src="@drawable/ic_close"
         android:background="@drawable/button_background"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
         android:padding="12dp"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true"
+
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"/>
 
 
 </RelativeLayout>

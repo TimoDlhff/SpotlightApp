@@ -67,23 +67,25 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 android:paddingStart="10dp"
-                android:paddingEnd="24dp">
+                android:paddingEnd="30dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phone"
+                    android:text="Smartphone"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Continue your progress on the phone."
+                    android:fontFamily="@font/roboto_font_family"
+                    android:textFontWeight="300"
+                    android:text="Nutze dein Handy, um deinen Fortschritt aufzuzeichnen."
                     android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -124,23 +126,25 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 android:paddingStart="10dp"
-                android:paddingEnd="24dp">
+                android:paddingEnd="30dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Smartwatch"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Sync your progress on your smartwatch."
+                    android:text="Werde per Vibration am Handgelenk über deine Fehler informiert."
                     android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
+                    android:fontFamily="@font/roboto_font_family"
+                    android:textFontWeight="300"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

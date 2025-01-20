@@ -66,7 +66,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
-                android:paddingEnd="24dp">
+                android:paddingEnd="30dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -80,8 +80,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:fontFamily="@font/roboto_font_family"
+                    android:textFontWeight="300"
                     android:layout_marginBottom="4dp"
-                    android:text="Having problems speaking too fast or too slow? Not in this mode!"
+                    android:text="Sprichst du zu schnell oder zu langsam? Nicht in diesem Modus!"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -120,12 +122,12 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
-                android:paddingEnd="24dp">
+                android:paddingEnd="30dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Filler Words"
+                    android:text="Füllwörter"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -135,7 +137,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Uhm...well...No! This ends now! Learn how to be more eloquent with this mode."
+                    android:fontFamily="@font/roboto_font_family"
+                    android:textFontWeight="300"
+                    android:text="Ähm… Nein!
+                    Reduziere Füllwörter konsequent für eine flüssigere Rede."
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
             </LinearLayout>

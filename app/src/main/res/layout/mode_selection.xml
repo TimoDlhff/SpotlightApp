@@ -54,12 +54,12 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
-                android:paddingEnd="24dp">
+                android:paddingEnd="30dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Presentation"
+                    android:text="Präsentation"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -71,11 +71,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Helps you feel secure and competent while still noticing you about mistakes from time to time"
+                    android:fontFamily="@font/roboto_font_family"
+                    android:text="Fühle dich sicher
+                    und entspannt.
+                    Erhalte gelegentlich Feedback zu Fehlern."
                     android:textColor="#FFFFFF"
-                    android:textSize="16sp"
                     android:textFontWeight="300"
-                    android:fontFamily="@font/roboto_font_family" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -111,7 +113,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
-                android:paddingEnd="24dp">
+                android:paddingEnd="30dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="This is hard mode. Every mistake counts. You will inevitably get better."
+                    android:text="Strenges Feedback zu jedem Fehler. Verbessere konsequent deine Sprechweise."
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:textFontWeight="300"

@@ -72,18 +72,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Handy"
+                    android:text="Smartphone"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Track your training progress on your phone."
+                    android:fontFamily="@font/roboto_font_family"
+                    android:textFontWeight="300"
+                    android:text="Nutze dein Handy, um deinen Fortschritt aufzuzeichnen."
                     android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -128,16 +130,18 @@
                     android:layout_height="wrap_content"
                     android:text="Smartwatch"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Monitor your training with your smartwatch."
+                    android:text="Werde per Vibration am Handgelenk über deine Fehler informiert."
                     android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
+                    android:fontFamily="@font/roboto_font_family"
+                    android:textFontWeight="300"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -395,7 +395,7 @@ public class SpeechSpeedActivityTraining extends BaseActivity {
         } else {
             if (vibrator != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                 } else {
                     vibrator.vibrate(200);
                 }

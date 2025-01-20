@@ -420,7 +420,7 @@ public class SpeechSpeedActivityPresentation extends BaseActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
                 } else {
-                    vibrator.vibrate(200);
+                    vibrator.vibrate(500);
                 }
             }
         }

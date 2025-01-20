@@ -63,7 +63,7 @@
         android:id="@+id/pieChartDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Füllwörter: 10% / gesamter Vortrag"
+        android:text="Keine Daten vorhanden"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:layout_marginTop="8dp"

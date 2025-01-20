@@ -95,7 +95,7 @@ public class DeviceSelectionTrainingActivity extends BaseActivity {
     private void sendWelcomeMessageToWatch(List<Node> nodes) {
         String message = "Willkommen beim";
         if ("filler_words".equals(selectedMode)) {
-            message += "\nFillerword Modus";
+            message += "\nFüllwortmodus";
         } else if ("speed".equals(selectedMode)) {
             message += "\nSpeech Speed Mode";
         }

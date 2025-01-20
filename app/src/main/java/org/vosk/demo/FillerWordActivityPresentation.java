@@ -157,9 +157,9 @@ public class FillerWordActivityPresentation extends BaseActivity implements Reco
                 List<String> variants = Arrays.asList("ähm", "äh", "hm", "emm", "am", "m", "öhm", "uhm", "ähh", "hmm", "und am", "und im");
                 selectedWords.addAll(variants);
                 for (String variant : variants) {
-                    variantToBaseWord.put(variant.toLowerCase(), "ähm");
+                    variantToBaseWord.put(variant.toLowerCase(), "Ähm");
                 }
-                fillerWordCounts.put("ähm", 0); // Initialisiere Zählung für das Basiswort
+                fillerWordCounts.put("Ähm", 0); // Initialisiere Zählung für das Basiswort
             } else {
                 selectedWords.add(word);
                 variantToBaseWord.put(word.toLowerCase(), word);
@@ -261,12 +261,22 @@ public class FillerWordActivityPresentation extends BaseActivity implements Reco
 
     private String findMatchingWord(String spokenText) {
         for (String word : selectedWords) {
-            if (Pattern.compile("\\b" + Pattern.quote(word) + "\\b", Pattern.CASE_INSENSITIVE).matcher(spokenText).find()) {
-                return word;
+            if (Pattern.compile("\\b" + Pattern.quote(word) + "\\b", Pattern.CASE_INSENSITIVE)
+                    .matcher(spokenText)
+                    .find()) {
+
+                // Hier kommt der entscheidende Schritt: statt "word" direkt zurückzugeben,
+                // holen wir das Basiswort aus variantToBaseWord
+                String baseWord = variantToBaseWord.get(word.toLowerCase());
+
+                // Falls kein Eintrag gefunden wird, nimm 'word' selbst.
+                // (z.B. bei Wörtern, die keine Varianten haben)
+                return baseWord != null ? baseWord : word;
             }
         }
         return null;
     }
+
 
     private void sendVibrationCommandToWatch(String detectedWord) {
         // 1. NodeId herausfinden

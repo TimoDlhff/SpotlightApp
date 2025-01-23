@@ -39,7 +39,7 @@ Spotlight ist eine Android-App für bessere Präsentationen. Mit Echtzeit-Sprach
 
 ### 1. Code holen
 ```bash
-git clone https://github.com/TimoDlhff/VocalWaveApp.git
+git clone [https://github.com/TimoDlhff/SpotlightApp.git]
 ```
 
 ### 2. In Android Studio öffnen

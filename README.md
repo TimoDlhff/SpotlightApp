@@ -1,6 +1,6 @@
-# VocalWave 🎤
+# SpotlightApp🎤
 
-VocalWave ist eine Android-App für bessere Präsentationen. Mit Echtzeit-Spracherkennung und dezenten Vibrationen hilft die App dabei, professioneller und überzeugender zu präsentieren.
+Spotlight ist eine Android-App für bessere Präsentationen. Mit Echtzeit-Spracherkennung und dezenten Vibrationen hilft die App dabei, professioneller und überzeugender zu präsentieren.
 
 ## Features ✨
 
